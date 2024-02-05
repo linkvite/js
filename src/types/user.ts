@@ -1,9 +1,9 @@
-import { type Endpoint } from "..";
 import {
     type Empty,
     type OBJECT_ID,
     type ImageUploadType,
-} from ".";
+} from "./generic";
+import { type Endpoint } from "../rest/endpoints";
 
 export type UserAccountType = "pro" | "free" | "enterprise";
 export type UserStatus = "active" | "inactive" | "suspended";

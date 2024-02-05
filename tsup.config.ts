@@ -9,6 +9,9 @@ const commonBuild: Options = {
     minifySyntax: true,
     minifyWhitespace: true,
     target: 'esnext',
+    banner: {
+        js: `/* Copyright ${new Date().getFullYear()} Linkvite Labs */`,
+    }
 };
 
 const define = ({ node = false } = {}) => ({

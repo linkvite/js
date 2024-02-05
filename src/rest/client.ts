@@ -1,7 +1,7 @@
-import { createURLBuilder } from '../index.ts';
+import { createURLBuilder } from '../utils/url';
+import { fetch, Headers, Request } from '../utils/fetch';
 import type { ExtractRouteParams, Method } from '../types';
-import { fetch, Headers, Request } from '../utils/fetch.ts';
-import type { APIResponse, Endpoints, ErroredAPIResponse } from '.';
+import type { APIResponse, Endpoints, ErroredAPIResponse } from './endpoints';
 
 export const DEFAULT_BASE_URL = 'https://api.linkvite.io';
 
@@ -174,7 +174,7 @@ export class APIClient {
     }
 
     private async executeRequest<T>(request: Request): Promise<T> {
-        if (TSUP_IS_NODE) {
+        if (typeof process !== 'undefined' && process.versions && process.versions.node) {
             if (!this.agent) {
                 const https = await import('https');
                 this.agent = new https.Agent({ keepAlive: true });

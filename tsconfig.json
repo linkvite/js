@@ -23,7 +23,6 @@
         "noUnusedParameters": true,
         "noImplicitReturns": true,
         "noUncheckedIndexedAccess": true,
-        "allowImportingTsExtensions": true,
         "declaration": true,
         "declarationMap": true,
         "exactOptionalPropertyTypes": true,
