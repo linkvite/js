@@ -1,1 +1,1 @@
-export interface Collection { }
+export type Collection = {}

@@ -47,7 +47,3 @@ export class Linkvite {
         this.collections = collections(this.client);
     }
 }
-
-// const lv = new Linkvite({ key: 'my-api-key' });
-// const myToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
-// const linkviteWithToken = new Linkvite({ token: myToken });

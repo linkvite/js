@@ -1,5 +1,9 @@
-import { type Empty, type ImageUploadType, type OBJECT_ID } from ".";
 import { type Endpoint } from "..";
+import {
+    type Empty,
+    type OBJECT_ID,
+    type ImageUploadType,
+} from ".";
 
 export type UserAccountType = "pro" | "free" | "enterprise";
 export type UserStatus = "active" | "inactive" | "suspended";
@@ -8,7 +12,7 @@ export type UserProfile = Omit<User, "email" | "folderName" | "emailVerified" | 
     isLiked?: boolean;
 };
 
-export interface User {
+export type User = {
     id: OBJECT_ID;
     name: string;
     email: string;
@@ -25,29 +29,29 @@ export interface User {
     updatedAt: string;
 }
 
-export interface UserStorage {
+export type UserStorage = {
     used: number;
     total: number;
 }
 
-interface Notification {
+export type Notification = {
     value: string;
     enabled: boolean;
 }
 
-interface Notifications {
+export type Notifications = {
     email: Notification;
     push: Notification;
     inApp: Notification;
 }
 
-interface AllowInvites {
+export type AllowInvites = {
     nobody: boolean;
     everyone: boolean;
     allowList: OBJECT_ID[];
 }
 
-export interface UserSettings {
+export type UserSettings = {
     allowInvites: AllowInvites;
     notifications: Notifications;
     autoArchiveBookmarks: boolean;
