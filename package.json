@@ -36,10 +36,11 @@
   "scripts": {
     "build": "rm -rf dist && tsup && node ./build/copy.js",
     "bench": "LINKVITE_DEBUG=true tsx _workbench.ts",
-    "release": "yarn build && yarn changeset publish",
-    "fullbuild": "yarn build && yarn docs",
+    "release": "pnpm build && pnpm changeset publish",
+    "fullbuild": "pnpm build && pnpm docs",
     "test": "tsx tests/index.ts",
-    "package": "yarn build && yarn pack"
+    "package": "pnpm build && pnpm pack",
+    "publish:pkg": "pnpm build && pnpm publish --access public"
   },
   "devDependencies": {
     "@changesets/cli": "2.26.1",
