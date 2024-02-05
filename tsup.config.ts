@@ -9,9 +9,6 @@ const commonBuild: Options = {
     minifySyntax: true,
     minifyWhitespace: true,
     target: 'esnext',
-    banner: {
-        js: `/* Copyright ${new Date().getFullYear()} Hop, Inc */`,
-    },
 };
 
 const define = ({ node = false } = {}) => ({

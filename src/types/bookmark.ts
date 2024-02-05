@@ -119,4 +119,4 @@ export type BookmarkEndpoints =
         url: string;
         collection?: string;
     }>
-    | Endpoint<'POST', 'v1/bookmarks/exists', { data: boolean; }, { url: string; }>
+    | Endpoint<'POST', 'v1/bookmarks/exists', boolean, { url: string; }>
