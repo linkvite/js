@@ -1,5 +1,10 @@
 # @linkvite/js
 
+## 0.0.8
+
+### Minor Changes
+- 17ae5b1: Updated the SDK to 0.0.8
+
 ## 0.0.7
 
 ### Minor Changes
