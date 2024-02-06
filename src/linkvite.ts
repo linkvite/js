@@ -27,7 +27,7 @@ export class Linkvite {
     public readonly bookmarks;
     public readonly collections;
 
-    constructor(optionsOrKey: Partial<APIClientOptions> | string) {
+    constructor(optionsOrKey: string | APIClientOptions) {
         if (!optionsOrKey || typeof optionsOrKey !== 'string' && !('key' in optionsOrKey) && !('token' in optionsOrKey)) {
             throw new Error(
                 'Missing authentication token to `new Linkvite()` — please provide a valid API Key, or Personal Access Token'

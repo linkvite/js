@@ -1,9 +1,14 @@
+import {
+    DEFAULT_BASE_URL
+} from '../utils/constants';
 import { createURLBuilder } from '../utils/url';
-import { fetch, Headers, Request } from '../utils/fetch';
+import { fetch, Headers, Request, setAuthHeader } from '../utils/fetch';
 import type { ExtractRouteParams, Method } from '../types';
-import type { APIResponse, Endpoints, ErroredAPIResponse } from './endpoints';
-
-export const DEFAULT_BASE_URL = 'https://api.linkvite.io';
+import type {
+    APIResponse,
+    Endpoints,
+    ErroredAPIResponse
+} from './endpoints';
 
 /**
  * Options passed to the API client.
@@ -80,10 +85,6 @@ export class APIClient {
         this.agent = null;
     }
 
-    authType() {
-        return 'key' in this.options ? 'key' : 'token';
-    }
-
     async get<Path extends PathsFor<"GET">, T>(
         path: Path,
         query: Query<Path>,
@@ -145,28 +146,30 @@ export class APIClient {
         init: RequestInit = {},
     ) {
         const url = this.url(path, query);
-        const headers = new Headers(init.headers);
-
-        if ('key' in this.options) {
-            headers.set('X-API-Key', this.options.key);
-        }
-
-        if ('token' in this.options) {
-            headers.set('Authorization', `Bearer ${this.options.token}`);
-        }
+        const headers = setAuthHeader(
+            new Headers(init.headers),
+            this.options
+        );
 
         if (body) {
             if (method === 'GET') {
                 throw new Error('Cannot send a body with a GET request');
             }
 
-            headers.set('Content-Type', 'application/json');
+            if (body instanceof FormData) {
+                // for some reason, files won't upload
+                // without removing the content type
+                // see: https://stackoverflow.com/a/39281156
+                headers.delete('Content-Type');
+            } else {
+                headers.set('Content-Type', 'application/json');
+            }
         }
 
         const request = new Request(url, {
             method,
             headers,
-            body: body ? JSON.stringify(body) : null,
+            body: body ? body instanceof FormData ? body : JSON.stringify(body) : null,
             ...init,
         });
 

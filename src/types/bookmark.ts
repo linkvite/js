@@ -99,24 +99,91 @@ export type BookmarkArticle = {
     content: string;
 }
 
+export type ParsedLinkData = {
+    title: string;
+    description: string;
+    name: string;
+    url: string;
+    type: string;
+    image: string;
+    favicon: string;
+    keywords: string;
+}
+
+type BookmarkEntry = {
+    tags?: string;
+    collection?: string;
+    allowComments?: boolean;
+}
+
+export type ManualBookmarkEntry = BookmarkEntry & {
+    url: string;
+    title: string;
+    cover?: string;
+    starred?: boolean;
+    description?: string;
+    coverType?: "default";
+}
+
+export type BookmarkFileEntry = BookmarkEntry & {
+    file: File;
+    starred?: boolean;
+}
+
+export type UpdateBookmarksEntry = BookmarkEntry & {
+    bookmarks: string[];
+    type?: BookmarkType;
+    status?: BookmarkStatus;
+}
+
+export type UpdateBookmarkEntry = BookmarkEntry & {
+    name?: string;
+    url?: string;
+    status?: BookmarkStatus;
+    description?: string;
+    favicon?: string;
+    type?: BookmarkType;
+}
+
 export type BookmarkEndpoints =
-    Endpoint<'GET', 'v1/bookmarks', {
+    Endpoint<'GET', 'v1/bookmarks/:id', { data: Bookmark; }>
+    | Endpoint<'GET', 'v1/bookmarks/:id/article', { data: BookmarkArticle; }>
+    | Endpoint<'GET', 'v1/bookmarks', {
         data: {
             bookmarks: Bookmark[];
             pagination: Pagination;
         }
     }>
-    | Endpoint<'GET', `v1/bookmarks/:id`, { data: Bookmark; }>
-    | Endpoint<'GET', `v1/bookmarks/from-collection/:id`, {
+    | Endpoint<'POST', 'v1/bookmarks/exists', boolean, { url: string; }>
+    | Endpoint<'GET', 'v1/bookmarks/from-collection/:id', {
         data: {
             bookmarks: Bookmark[];
             pagination: Pagination;
             collection: string;
         }
     }>
-    | Endpoint<'GET', `v1/bookmarks/:id/article`, { data: BookmarkArticle; }>
-    | Endpoint<'POST', 'v1/bookmarks/', { data: Bookmark; }, {
+    | Endpoint<'GET', 'v1/bookmarks/:id/archive', { data: string }>
+    | Endpoint<'POST', 'v1/bookmarks/:id/archive', string>
+    | Endpoint<'POST', 'v1/bookmarks', { data: Bookmark; }, {
         url: string;
-        collection?: string;
+        collection: string | null;
     }>
-    | Endpoint<'POST', 'v1/bookmarks/exists', boolean, { url: string; }>
+    | Endpoint<'POST',
+        'v1/bookmarks/from-parsed-data',
+        { data: Bookmark; },
+        {
+            data: ParsedLinkData;
+            collection: string | null;
+        }>
+    | Endpoint<'POST', 'v1/bookmarks/manual', { data: Bookmark; }, ManualBookmarkEntry>
+    | Endpoint<'POST', 'v1/bookmarks/file', { data: Bookmark[]; }, FormData>
+    | Endpoint<'POST', 'v1/bookmarks/:id/re-parse', { data: ParsedLinkData; }>
+    | Endpoint<'POST', 'v1/bookmarks/:id/like', {}>
+    | Endpoint<'POST', 'v1/bookmarks/batch-like', {}, {
+        value: boolean;
+        bookmarks: string[];
+    }>
+    | Endpoint<'PATCH', 'v1/bookmarks/batch-edit', {}, UpdateBookmarksEntry>
+    | Endpoint<'PATCH', 'v1/bookmarks/:id', { data: Bookmark; }, UpdateBookmarkEntry>
+    | Endpoint<'PATCH', 'v1/bookmarks/:id/cover', { data: Bookmark; }, FormData>
+    | Endpoint<'DELETE', 'v1/bookmarks/:id', {}>

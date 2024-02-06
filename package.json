@@ -40,7 +40,8 @@
     "fullbuild": "pnpm build && pnpm docs",
     "test": "tsx tests/index.ts",
     "package": "pnpm build && pnpm pack",
-    "publish:pkg": "pnpm build && pnpm publish --access public"
+    "publish:pkg": "pnpm build && pnpm publish --access public",
+    "publish:dev": "pnpm build && npm link"
   },
   "devDependencies": {
     "@types/node": "18.15.5",
