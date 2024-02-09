@@ -1,6 +1,7 @@
 import type {
     BookmarkFileEntry,
     BookmarkPagination,
+    ImageUploadType,
     ManualBookmarkEntry,
     ParsedLinkData,
     UpdateBookmarkEntry,
@@ -68,7 +69,7 @@ export const bookmarks = sdk(client => ({
     /**
      * Request to create an archive of a bookmark
      * 
-     * @param {String} url - The URL of the bookmark
+     * @param {String} id - id URL of the bookmark
      */
     async createArchive(id: string) {
         return await client.post('v1/bookmarks/:id/archive', undefined, { id });
@@ -165,6 +166,7 @@ export const bookmarks = sdk(client => ({
      * Update a bookmark by its ID
      * 
      * @param {String} id - The ID of the bookmark
+     * @param {UpdateBookmarkEntry} data - The data to update the bookmark with
      */
     async update(id: string, data: UpdateBookmarkEntry) {
         return await client.patch('v1/bookmarks/:id', data, { id });
@@ -174,11 +176,16 @@ export const bookmarks = sdk(client => ({
      * Update a bookmark's cover image
      * 
      * @param {String} id - The ID of the bookmark
+     * @param {Object} data - The data to update the cover with
      */
-    async updateCover(id: string, { file, cover, type, }: {
-        file?: File;
-        cover?: string;
-        type: "default" | "custom";
+    async updateCover(id: string, { file, cover, type }: {
+        file?: never;
+        cover: string;
+        type: Extract<ImageUploadType, 'default'>;
+    } | {
+        file: File;
+        cover?: never;
+        type: Extract<ImageUploadType, 'custom'>;
     }) {
         const formData = new FormData();
         formData.append('type', type);

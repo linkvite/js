@@ -1,7 +1,6 @@
 import {
     type Empty,
     type OBJECT_ID,
-    type ImageUploadType,
 } from "./generic";
 import { type Endpoint } from "../rest/endpoints";
 
@@ -57,25 +56,20 @@ export type UserSettings = {
     autoArchiveBookmarks: boolean;
 }
 
+export type UpdateUserEntry = {
+    name?: string;
+    email?: string;
+    username?: string;
+    folderName?: string;
+    privateAccount?: boolean;
+}
+
 export type UserEndpoints =
     Endpoint<'GET', 'v1/user', { data: User; }>
     | Endpoint<'GET', 'v1/user/storage', { data: UserStorage; }>
+    | Endpoint<'PATCH', 'v1/user', { data: User; }, UpdateUserEntry>
+    | Endpoint<'PATCH', 'v1/user/avatar', { data: User; }, FormData>
     | Endpoint<'GET', 'v1/user/settings', { data: UserSettings; }>
-    | Endpoint<'PATCH', 'v1/user', { data: User; }, {
-        name?: string;
-        email?: string;
-        username?: string;
-        folderName?: string;
-        privateAccount?: boolean;
-    }>
-    | Endpoint<'PATCH', 'v1/user/avatar', { data: User; }, {
-        file?: File;
-        avatar?: string;
-        type: ImageUploadType;
-    }>
-    | Endpoint<'POST', 'v1/user/change-password', Empty, {
-        oldPassword: string;
-        newPassword: string;
-    }>
     | Endpoint<'PATCH', 'v1/user/settings', { data: UserSettings; }, Partial<UserSettings>>
+
     | Endpoint<'DELETE', 'v1/user/trash', Empty>

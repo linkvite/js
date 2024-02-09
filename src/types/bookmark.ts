@@ -1,5 +1,10 @@
-import type { Endpoint } from "..";
-import type { Pagination, PaginationRequest, UserProfile } from ".";
+import type { Endpoint } from "../rest";
+import type { UserProfile } from "./user";
+import type {
+    Empty,
+    Pagination,
+    PaginationRequest,
+} from "./generic";
 
 export type BookmarkPath = "all" | "starred" | "trashed";
 export type BookmarkStatus = "active" | "trashed" | "deleted";
@@ -178,12 +183,12 @@ export type BookmarkEndpoints =
     | Endpoint<'POST', 'v1/bookmarks/manual', { data: Bookmark; }, ManualBookmarkEntry>
     | Endpoint<'POST', 'v1/bookmarks/file', { data: Bookmark[]; }, FormData>
     | Endpoint<'POST', 'v1/bookmarks/:id/re-parse', { data: ParsedLinkData; }>
-    | Endpoint<'POST', 'v1/bookmarks/:id/like', {}>
-    | Endpoint<'POST', 'v1/bookmarks/batch-like', {}, {
+    | Endpoint<'POST', 'v1/bookmarks/:id/like', Empty>
+    | Endpoint<'POST', 'v1/bookmarks/batch-like', Empty, {
         value: boolean;
         bookmarks: string[];
     }>
-    | Endpoint<'PATCH', 'v1/bookmarks/batch-edit', {}, UpdateBookmarksEntry>
+    | Endpoint<'PATCH', 'v1/bookmarks/batch-edit', Empty, UpdateBookmarksEntry>
     | Endpoint<'PATCH', 'v1/bookmarks/:id', { data: Bookmark; }, UpdateBookmarkEntry>
     | Endpoint<'PATCH', 'v1/bookmarks/:id/cover', { data: Bookmark; }, FormData>
-    | Endpoint<'DELETE', 'v1/bookmarks/:id', {}>
+    | Endpoint<'DELETE', 'v1/bookmarks/:id', Empty>

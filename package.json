@@ -1,6 +1,6 @@
 {
   "name": "@linkvite/js",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -44,6 +44,7 @@
     "publish:dev": "pnpm build && npm link"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.1",
     "@types/node": "18.15.5",
     "dotenv": "16.0.3",
     "prettier": "2.8.6",

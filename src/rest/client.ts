@@ -53,6 +53,7 @@ export type Query<Path extends string> = ExtractRouteParams<Path> &
  * @public
  */
 export class LinkviteAPIError extends Error {
+    public readonly ok: boolean;
     public readonly status: number;
 
     constructor(
@@ -63,6 +64,7 @@ export class LinkviteAPIError extends Error {
         super(data.message);
 
         this.status = response.status;
+        this.ok = data?.ok ?? response.ok ?? false;
     }
 }
 
@@ -83,6 +85,10 @@ export class APIClient {
         // have a value in Node.js environments. This is because
         // we add code at build time
         this.agent = null;
+    }
+
+    authType() {
+        return 'key' in this.options ? 'key' : 'token';
     }
 
     async get<Path extends PathsFor<"GET">, T>(
