@@ -3,6 +3,7 @@ import type {
     BookmarkPagination,
     ImageUploadType,
     ManualBookmarkEntry,
+    ManualBookmarkEntryPayload,
     ParsedLinkData,
     UpdateBookmarkEntry,
     UpdateBookmarksEntry
@@ -95,8 +96,18 @@ export const bookmarks = sdk(client => ({
     /**
      * Create a new bookmark from manual data
      */
-    async createFromManualEntry(data: ManualBookmarkEntry) {
-        return await client.post('v1/bookmarks/manual', data, {});
+    async createFromEntry(data: ManualBookmarkEntry) {
+        let payload = {} as ManualBookmarkEntryPayload;
+
+        data.tags
+            ? payload = { ...data, tags: data.tags.join(",") }
+            : payload = data as unknown as ManualBookmarkEntryPayload;
+
+        if (data.cover) {
+            payload = { ...payload, coverType: "default" };
+        }
+
+        return await client.post('v1/bookmarks/manual', payload, {});
     },
 
     /**

@@ -121,12 +121,19 @@ type BookmarkEntry = {
     allowComments?: boolean;
 }
 
-export type ManualBookmarkEntry = BookmarkEntry & {
+export type ManualBookmarkEntry = {
     url: string;
     title: string;
     cover?: string;
+    tags?: string[];
     starred?: boolean;
+    collection?: string;
     description?: string;
+    allowComments?: boolean;
+}
+
+export type ManualBookmarkEntryPayload = Omit<ManualBookmarkEntry, "tags"> & {
+    tags?: string;
     coverType?: "default";
 }
 
@@ -180,7 +187,7 @@ export type BookmarkEndpoints =
             data: ParsedLinkData;
             collection: string | null;
         }>
-    | Endpoint<'POST', 'v1/bookmarks/manual', { data: Bookmark; }, ManualBookmarkEntry>
+    | Endpoint<'POST', 'v1/bookmarks/manual', { data: Bookmark; }, ManualBookmarkEntryPayload>
     | Endpoint<'POST', 'v1/bookmarks/file', { data: Bookmark[]; }, FormData>
     | Endpoint<'POST', 'v1/bookmarks/:id/re-parse', { data: ParsedLinkData; }>
     | Endpoint<'POST', 'v1/bookmarks/:id/like', Empty>

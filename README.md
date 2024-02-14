@@ -14,7 +14,8 @@ import { Linkvite } from '@linkvite/js';
 // with API key
 const myKey = 'random-super-secret-key';
 const linkvite = new Linkvite(myKey);
-// or new Linkvite({ key: myKey });
+// or
+const linkvite = new Linkvite({ key: myKey });
 
 // or with personal access token
 const myToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
@@ -23,7 +24,10 @@ const linkvite = new Linkvite({
 });
 
 // example: Creating a new bookmark
-const bookmark = await linkvite.bookmarks.create({
+const bookmark = await linkvite.bookmarks.create('https://example.com');
+
+// or
+const bookmark = await linkvite.bookmarks.createFromEntry({
     title: 'My Bookmark',
     url: 'https://example.com',
     tags: ['example', 'test'],
