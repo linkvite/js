@@ -1,4 +1,4 @@
-import type { BookmarkEndpoints, Method, UserEndpoints } from "../types";
+import type { BookmarkEndpoints, CollectionEndpoints, Method, UserEndpoints } from "../types";
 
 export type ValidateFieldError = {
     tag: string;
@@ -54,4 +54,5 @@ export type Endpoint<
  */
 export type Endpoints =
     | UserEndpoints
-    | BookmarkEndpoints;
+    | BookmarkEndpoints
+    | CollectionEndpoints;
