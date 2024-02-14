@@ -1,5 +1,11 @@
 # @linkvite/js
 
+## 0.3.0
+
+### Minor Changes
+
+- dc2accf: Fixed creating bookmark from entry + update read me
+
 ## 0.2.0
 
 ### Minor Changes
