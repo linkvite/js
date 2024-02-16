@@ -1,43 +1,45 @@
-import type { Endpoint } from "../rest";
-import type { UserProfile } from "./user";
+import type { Endpoint } from '../rest';
+import type { UserProfile } from './user';
 import type {
     Empty,
+    OBJECT_ID,
     Pagination,
     PaginationRequest,
-} from "./generic";
+} from './generic';
 
-export type BookmarkPath = "all" | "starred" | "trashed";
-export type BookmarkStatus = "active" | "trashed" | "deleted";
-export type BookmarkRole = "owner" | "admin" | "moderator" | "viewer";
-export type BookmarkType = "image"
-    | "video"
-    | "audio"
-    | "music"
-    | "article"
-    | "application"
-    | "website"
+export type BookmarkPath = 'all' | 'starred' | 'trashed';
+export type BookmarkStatus = 'active' | 'trashed' | 'deleted';
+export type BookmarkRole = 'owner' | 'admin' | 'moderator' | 'viewer';
+export type BookmarkArchiveStatus = "requested" | "pending" | "success" | "failed";
+export type BookmarkType = 'image'
+    | 'video'
+    | 'audio'
+    | 'music'
+    | 'article'
+    | 'application'
+    | 'website'
 
-export type BookmarkMimeType = "text/html"
-    | "text/plain"
-    | "image/jpg"
-    | "image/jpeg"
-    | "image/png"
-    | "image/gif"
-    | "image/webp"
-    | "image/svg+xml"
-    | "image/bmp"
-    | "audio/mpeg"
-    | "audio/wav"
-    | "audio/ogg"
-    | "audio/x-m4a"
-    | "audio/mp4"
-    | "video/mp4"
-    | "video/webm"
-    | "application/pdf"
-    | "application/zip" // no preview
-    | "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" // no preview
-    | "application/vnd.openxmlformats-officedocument.wordprocessingml.document" // no preview
-    | "application/vnd.openxmlformats-officedocument.presentationml.presentation" // no preview
+export type BookmarkMimeType = 'text/html'
+    | 'text/plain'
+    | 'image/jpg'
+    | 'image/jpeg'
+    | 'image/png'
+    | 'image/gif'
+    | 'image/webp'
+    | 'image/svg+xml'
+    | 'image/bmp'
+    | 'audio/mpeg'
+    | 'audio/wav'
+    | 'audio/ogg'
+    | 'audio/x-m4a'
+    | 'audio/mp4'
+    | 'video/mp4'
+    | 'video/webm'
+    | 'application/pdf'
+    | 'application/zip' // no preview
+    | 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' // no preview
+    | 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // no preview
+    | 'application/vnd.openxmlformats-officedocument.presentationml.presentation' // no preview
 
 export type BookmarkPagination = PaginationRequest & {
     sort?: string;
@@ -52,47 +54,186 @@ export type ImportItem = {
     tags: string;
     folder: string;
     cover: string;
-    linkAction: "unique" | "merge";
+    linkAction: 'unique' | 'merge';
 }
 
 export type Bookmark = {
-    id: string;
+    id: OBJECT_ID;
     info: {
+        /**
+         * The name of the bookmark (aka title)
+         */
         name: string;
+
+        /**
+         * Unique slug for the bookmark
+         */
         slug: string;
-        collection: string;
+
+        /**
+         * The location of the bookmark
+         * 
+         * if it's '0000000000000', it has no location
+         */
+        collection: OBJECT_ID;
+
+        /**
+         * Description of the bookmark
+         */
         description?: string;
+
+        /**
+         * Status of the bookmark
+         */
         status: BookmarkStatus;
     };
+
+    /**
+     * An array of tag names, eg: ['tag1', 'tag2']
+     * 
+     * They should be unique.
+     */
     tags: string[];
+
     assets: {
+        /**
+         * Also known as favicon
+         */
         icon: string;
+
+        /**
+         * Cover image of the bookmark
+         */
         thumbnail: string;
+
+        /**
+         * @deprecated
+         * HTML content of the bookmark
+         */
         html: string;
     };
     config: {
+        /**
+         * If it's not a file, and we can't access it, 
+         * then it's a broken bookmark
+         * 
+         * Careful with this, our fetcher might not be able
+         * to access it's content
+         */
         isBroken: boolean;
+
+        /**
+         * Whether commenting is allowed for this bookmark
+         */
         allowComments: boolean;
     };
     meta: {
+        /**
+         * The URL of the bookmark
+         */
         url: string;
+
+        /**
+         * If it's a file, it has a key used to find the path
+         * where it's stored in the cloud
+         */
         key: string;
+
+        /**
+         * It's a file if the size is greater than 0
+         * 
+         * Size in bytes.
+         */
         size: number;
+
+        /**
+         * Number of times the bookmark has been opened
+         * 
+         * Updated whenever a call is made to the `/bookmarks/:id` endpoint
+         */
         views: number;
+
+        /**
+         * Linkvite's own type
+         * 
+         * Used internally for filtering.
+         */
         type: BookmarkType;
+
+        /**
+         * Generic mime type
+         */
         mimeType: BookmarkMimeType;
     };
     archive: {
-        key: string;
-    }
-    createdAt: Date | number;
-    updatedAt: Date | number;
-    updatedBy: string;
-    lastOpened: Date | number;
-    owner: string;
+        /**
+         * If it has been archived, it has a size
+         * 
+         * Size in bytes.
+         */
+        size: number;
 
-    isLiked?: boolean;
-    role?: BookmarkRole;
+        /**
+         * Date when it was archived
+         */
+        createdAt: Date;
+
+        /**
+         * Status of the archive
+         * 
+         * Requested: The archive has been requested
+         * 
+         * Pending: No action has been taken yet
+         * 
+         * Success: The archive has been processed
+         * 
+         * Failed: The archive failed
+         */
+        status: BookmarkArchiveStatus;
+    }
+
+    /**
+     * Date when the bookmark was created
+     */
+    createdAt: Date;
+
+    /**
+     * Date when the bookmark was last updated
+     */
+    updatedAt: Date;
+
+    /**
+     * Last time the bookmark was opened
+     * 
+     * Updated whenever a call is made to the `/bookmarks/:id` endpoint
+     * 
+     * or anytime the bookmark was updated.
+     */
+    lastOpened: Date;
+
+    /**
+     * The ID of the user who last updated the bookmark
+     */
+    updatedBy: OBJECT_ID;
+
+    /**
+     * The ID of the user who created the bookmark
+     */
+    owner: OBJECT_ID;
+
+    /**
+     * Whether the bookmark has been liked by whoever fetches it
+     */
+    isLiked: boolean;
+
+    /**
+     * Role of the user who fetched the bookmark
+     */
+    role: BookmarkRole;
+
+    /**
+     * (Optional) Profile of the user who created the bookmark
+     */
     ownerProfile?: UserProfile;
 }
 
@@ -132,9 +273,9 @@ export type ManualBookmarkEntry = {
     allowComments?: boolean;
 }
 
-export type ManualBookmarkEntryPayload = Omit<ManualBookmarkEntry, "tags"> & {
+export type ManualBookmarkEntryPayload = Omit<ManualBookmarkEntry, 'tags'> & {
     tags?: string;
-    coverType?: "default";
+    coverType?: 'default';
 }
 
 export type BookmarkFileEntry = BookmarkEntry & {

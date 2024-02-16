@@ -1,4 +1,4 @@
-import { sdk } from "./create";
+import { sdk } from './create';
 import type {
     CreateCollectionEntry,
     EditUserRoleEntry,
@@ -6,7 +6,7 @@ import type {
     InviteToCollectionEntry,
     MoveOrRemoveCollectionEntry,
     UpdateCollectionEntry
-} from "../types";
+} from '../types';
 
 /**
  * Collections SDK client

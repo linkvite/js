@@ -1,9 +1,9 @@
-import type { Empty, Endpoint } from "..";
-import type { UserProfile } from "./user";
+import type { UserProfile } from './user';
+import type { Empty, Endpoint, OBJECT_ID } from '..';
 
 export type CollectionRole = 'admin' | 'moderator' | 'viewer';
 export type Collection = {
-    id: string;
+    id: OBJECT_ID;
     info: {
         name: string;
         slug: string;
@@ -25,11 +25,11 @@ export type Collection = {
     meta: {
         views: number;
     }
-    owner: string;
-    parent: string;
-    updatedBy: string;
-    createdAt: Date | number;
-    updatedAt: Date | number;
+    createdAt: Date;
+    updatedAt: Date;
+    owner: OBJECT_ID;
+    parent: OBJECT_ID;
+    updatedBy: OBJECT_ID;
     bookmarkCount: number;
     isLiked: boolean;
     role: CollectionRole;

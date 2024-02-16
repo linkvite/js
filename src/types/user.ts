@@ -1,13 +1,13 @@
 import {
     type Empty,
     type OBJECT_ID,
-} from "./generic";
-import { type Endpoint } from "../rest/endpoints";
+} from './generic';
+import { type Endpoint } from '../rest/endpoints';
 
-export type UserAccountType = "pro" | "free" | "enterprise";
-export type UserStatus = "active" | "inactive" | "suspended";
+export type UserAccountType = 'pro' | 'free' | 'enterprise';
+export type UserStatus = 'active' | 'inactive' | 'suspended';
 
-export type UserProfile = Omit<User, "email" | "folderName" | "emailVerified" | "updatedAt" | "lastLogin"> & {
+export type UserProfile = Omit<User, 'email' | 'folderName' | 'emailVerified' | 'updatedAt' | 'lastLogin'> & {
     isLiked?: boolean;
 };
 

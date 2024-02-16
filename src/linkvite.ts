@@ -2,8 +2,8 @@ import {
     user,
     bookmarks,
     collections
-} from "./sdks";
-import { APIClient, type APIClientOptions } from "./rest";
+} from './sdks';
+import { APIClient, type APIClientOptions } from './rest';
 
 /**
  * Root class containing all methods and types for interacting with the Linkvite platform.

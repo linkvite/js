@@ -7,8 +7,8 @@ import type {
     ParsedLinkData,
     UpdateBookmarkEntry,
     UpdateBookmarksEntry
-} from "../types";
-import { sdk } from "./create";
+} from '../types';
+import { sdk } from './create';
 
 /**
  * Bookmarks SDK client
@@ -100,11 +100,11 @@ export const bookmarks = sdk(client => ({
         let payload = {} as ManualBookmarkEntryPayload;
 
         data.tags
-            ? payload = { ...data, tags: data.tags.join(",") }
+            ? payload = { ...data, tags: data.tags.join(',') }
             : payload = data as unknown as ManualBookmarkEntryPayload;
 
         if (data.cover) {
-            payload = { ...payload, coverType: "default" };
+            payload = { ...payload, coverType: 'default' };
         }
 
         return await client.post('v1/bookmarks/manual', payload, {});

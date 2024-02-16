@@ -1,4 +1,9 @@
-import type { BookmarkEndpoints, CollectionEndpoints, Method, UserEndpoints } from "../types";
+import type {
+    BookmarkEndpoints,
+    CollectionEndpoints,
+    Method,
+    UserEndpoints
+} from '../types';
 
 export type ValidateFieldError = {
     tag: string;

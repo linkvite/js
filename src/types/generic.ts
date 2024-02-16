@@ -14,7 +14,7 @@ export type OBJECT_ID = string;
  * Image upload type
  * @public
  */
-export type ImageUploadType = "custom" | "default" | "remove";
+export type ImageUploadType = 'custom' | 'default' | 'remove';
 
 /**
  * Empty req / response body

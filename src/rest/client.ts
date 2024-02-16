@@ -91,12 +91,12 @@ export class APIClient {
         return 'key' in this.options ? 'key' : 'token';
     }
 
-    async get<Path extends PathsFor<"GET">, T>(
+    async get<Path extends PathsFor<'GET'>, T>(
         path: Path,
         query: Query<Path>,
         init?: RequestInit,
     ) {
-        return this.request<T & Extract<Endpoints, { method: "GET"; path: Path }>['res']['data']>(
+        return this.request<T & Extract<Endpoints, { method: 'GET'; path: Path }>['res']['data']>(
             'GET',
             path,
             undefined,

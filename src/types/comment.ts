@@ -1,20 +1,23 @@
-import type { UserProfile } from "./user";
-import type { BookmarkRole } from "./bookmark";
+import type { OBJECT_ID } from '.';
+import type { UserProfile } from './user';
+import type { BookmarkRole } from './bookmark';
+
+export type CommentStatus = 'active' | 'hidden' | 'deleted';
 
 export type Comment = {
-    id: string;
-    owner: string;
-    status: string;
-    parent: string;
+    id: OBJECT_ID;
+    status: CommentStatus;
     content: string;
-    bookmark: string;
-    createdAt: Date | number;
-    updatedAt: Date | number;
+    owner: OBJECT_ID;
+    parent: OBJECT_ID;
+    bookmark: OBJECT_ID;
+    createdAt: Date;
+    updatedAt: Date;
+    isLiked: boolean;
+    role: BookmarkRole;
+    likesCount: number;
+    repliesCount: number;
 
-    role?: BookmarkRole;
-    isLiked?: boolean;
-    likesCount?: number;
-    repliesCount?: number;
     ownerProfile?: UserProfile;
 }
 

@@ -1,11 +1,20 @@
+import type { OBJECT_ID } from './generic';
 
 export type Highlight = {
-    _id?: string; // mongo id
-    id: string; // uuid
+    /**
+     * Mongo DB Object ID
+     */
+    _id: OBJECT_ID;
+
+    /**
+     * UUID V4
+     */
+    id: string;
+
     type: string;
     note?: string;
-    owner: string;
-    bookmark: string;
+    owner: OBJECT_ID;
+    bookmark: OBJECT_ID;
     body: HighlightBody[];
     target: HighlightTarget;
 }

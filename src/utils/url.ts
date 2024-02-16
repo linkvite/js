@@ -1,5 +1,5 @@
-import type { Query } from "..";
-import type { ExtractRouteParams } from "../types";
+import type { Query } from '..';
+import type { ExtractRouteParams } from '../types';
 
 export function lead(x: string) {
     return x.charCodeAt(0) === 47 ? x : '/' + x;
