@@ -9,18 +9,18 @@ NB: Only pro accounts can use the API with an API key. If you're on a free accou
 Create an [API key](https://docs.linkvite.io/reference/api-key) or personal access token.
 
 ```ts
-import { Linkvite } from '@linkvite/js';
+import {Linkvite} from '@linkvite/js';
 
 // with API key
 const myKey = 'random-super-secret-key';
 const linkvite = new Linkvite(myKey);
 // or
-const linkvite = new Linkvite({ key: myKey });
+const linkvite = new Linkvite({key: myKey});
 
 // or with personal access token
 const myToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
 const linkvite = new Linkvite({
-    token: myToken,
+	token: myToken,
 });
 
 // example: Creating a new bookmark
@@ -28,17 +28,17 @@ const bookmark = await linkvite.bookmarks.create('https://example.com');
 
 // or
 const bookmark = await linkvite.bookmarks.createFromEntry({
-    title: 'My Bookmark',
-    url: 'https://example.com',
-    tags: ['example', 'test'],
+	title: 'My Bookmark',
+	url: 'https://example.com',
+	tags: ['example', 'test'],
 });
 
 // example: Sending a collection invite.
 const invite = await linkvite.invites.create({
-    collection: 'id-of-my-collection',
-    recipients: ['john-doe', 'jane@doe.com'], // usernames or emails
-    message: 'Check out my collection!',
-    role: 'viewer', // viewer, moderator, or admin. defaults to viewer.
+	collection: 'id-of-my-collection',
+	recipients: ['john-doe', 'jane@doe.com'], // usernames or emails
+	message: 'Check out my collection!',
+	role: 'viewer', // viewer, moderator, or admin. defaults to viewer.
 });
 ```
 

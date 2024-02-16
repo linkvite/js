@@ -1,14 +1,14 @@
 import type {
-    BookmarkEndpoints,
-    CollectionEndpoints,
-    Method,
-    UserEndpoints
+	BookmarkEndpoints,
+	CollectionEndpoints,
+	Method,
+	UserEndpoints,
 } from '../types';
 
 export type ValidateFieldError = {
-    tag: string;
-    field: string;
-    value: string;
+	tag: string;
+	field: string;
+	value: string;
 };
 
 /**
@@ -16,9 +16,9 @@ export type ValidateFieldError = {
  * @public
  */
 export type SuccessfulAPIResponse<T> = {
-    ok: true;
-    message: string;
-    data: T;
+	ok: true;
+	message: string;
+	data: T;
 };
 
 /**
@@ -26,9 +26,9 @@ export type SuccessfulAPIResponse<T> = {
  * @public
  */
 export type ErroredAPIResponse = {
-    ok: false;
-    message: string;
-    errors?: ValidateFieldError[];
+	ok: false;
+	message: string;
+	errors?: ValidateFieldError[];
 };
 
 /**
@@ -42,22 +42,19 @@ export type APIResponse<T> = SuccessfulAPIResponse<T> | ErroredAPIResponse;
  * @public
  */
 export type Endpoint<
-    M extends Method,
-    Path extends string,
-    Res,
-    Body = undefined,
+	M extends Method,
+	Path extends string,
+	Res,
+	Body = undefined,
 > = {
-    method: M;
-    path: Path;
-    res: Res;
-    body: Body;
+	method: M;
+	path: Path;
+	res: Res;
+	body: Body;
 };
 
 /**
  * Extract an endpoint from a given method and path
  * @public
  */
-export type Endpoints =
-    | UserEndpoints
-    | BookmarkEndpoints
-    | CollectionEndpoints;
+export type Endpoints = UserEndpoints | BookmarkEndpoints | CollectionEndpoints;

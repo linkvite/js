@@ -1,20 +1,20 @@
-import type { Query } from '..';
-import type { ExtractRouteParams } from '../types';
+import type {Query} from '..';
+import type {ExtractRouteParams} from '../types';
 
 export function lead(x: string) {
-    return x.charCodeAt(0) === 47 ? x : '/' + x;
+	return x.charCodeAt(0) === 47 ? x : '/' + x;
 }
 
 export function isObjectEmpty(object: object) {
-    for (const _ in object) {
-        return false;
-    }
+	for (const _ in object) {
+		return false;
+	}
 
-    return true;
+	return true;
 }
 
 export function join(a: string, b: string) {
-    return a + lead(b);
+	return a + lead(b);
 }
 
 /**
@@ -24,66 +24,66 @@ export function join(a: string, b: string) {
  * @returns A string of query params
  */
 export function querystring(query: Query<string>): string {
-    const usefulQuery = Object.entries(query).filter(
-        (entry): entry is [string, string | number] => {
-            const [, value] = entry;
+	const usefulQuery = Object.entries(query).filter(
+		(entry): entry is [string, string | number] => {
+			const [, value] = entry;
 
-            return value !== undefined;
-        },
-    );
+			return value !== undefined;
+		},
+	);
 
-    if (usefulQuery.length === 0) {
-        return '';
-    }
+	if (usefulQuery.length === 0) {
+		return '';
+	}
 
-    const INITIAL_QUERYSTRING = '?';
+	const INITIAL_QUERYSTRING = '?';
 
-    return usefulQuery.reduce((acc, [key, value]) => {
-        if (value === undefined) {
-            return acc;
-        }
+	return usefulQuery.reduce((acc, [key, value]) => {
+		if (value === undefined) {
+			return acc;
+		}
 
-        const result = `${key}=${value.toString()}`;
+		const result = `${key}=${value.toString()}`;
 
-        if (acc === INITIAL_QUERYSTRING) {
-            return INITIAL_QUERYSTRING + result;
-        }
+		if (acc === INITIAL_QUERYSTRING) {
+			return INITIAL_QUERYSTRING + result;
+		}
 
-        return acc + '&' + result;
-    }, INITIAL_QUERYSTRING);
+		return acc + '&' + result;
+	}, INITIAL_QUERYSTRING);
 }
 
 export function createURLBuilder(base: string) {
-    const regex = /:[^/?#]+/g;
+	const regex = /:[^/?#]+/g;
 
-    return <Path extends string>(path: Path, query: Query<Path>) => {
-        query = { ...query };
+	return <Path extends string>(path: Path, query: Query<Path>) => {
+		query = {...query};
 
-        const urlWithParams = path.replace(regex, param => {
-            param = param.substring(1);
+		const urlWithParams = path.replace(regex, param => {
+			param = param.substring(1);
 
-            if (param in query) {
-                const { [param]: value, ...rest } = query;
-                query = rest as ExtractRouteParams<Path>;
+			if (param in query) {
+				const {[param]: value, ...rest} = query;
+				query = rest as ExtractRouteParams<Path>;
 
-                if (value === undefined) {
-                    throw new Error(`URL param ${param} is undefined`);
-                }
+				if (value === undefined) {
+					throw new Error(`URL param ${param} is undefined`);
+				}
 
-                if (typeof value === 'number') {
-                    return value.toString();
-                }
+				if (typeof value === 'number') {
+					return value.toString();
+				}
 
-                return value;
-            }
+				return value;
+			}
 
-            throw new Error(`Missing param ${param}.`);
-        });
+			throw new Error(`Missing param ${param}.`);
+		});
 
-        const urlWithSearch = isObjectEmpty(query)
-            ? urlWithParams
-            : `${urlWithParams}${querystring(query as Query<string>)}`;
+		const urlWithSearch = isObjectEmpty(query)
+			? urlWithParams
+			: `${urlWithParams}${querystring(query as Query<string>)}`;
 
-        return join(base, urlWithSearch);
-    };
+		return join(base, urlWithSearch);
+	};
 }
