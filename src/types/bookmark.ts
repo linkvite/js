@@ -10,7 +10,7 @@ import type {
 export type BookmarkPath = 'all' | 'starred' | 'trashed';
 export type BookmarkStatus = 'active' | 'trashed' | 'deleted';
 export type BookmarkRole = 'owner' | 'admin' | 'moderator' | 'viewer';
-export type BookmarkArchiveStatus = "requested" | "pending" | "success" | "failed";
+export type BookmarkArchiveStatus = 'requested' | 'pending' | 'success' | 'failed';
 export type BookmarkType = 'image'
     | 'video'
     | 'audio'
