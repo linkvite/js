@@ -67,7 +67,7 @@ export type Bookmark = {
         name: string;
 
         /**
-         * Unique slug for the bookmark
+         * A unique slug identifier for the bookmark
          */
         slug: string;
 
@@ -98,6 +98,8 @@ export type Bookmark = {
 
     assets: {
         /**
+         * The icon of the bookmark
+         * 
          * Also known as favicon
          */
         icon: string;
