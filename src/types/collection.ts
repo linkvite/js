@@ -1,39 +1,116 @@
 import type { UserProfile } from './user';
 import type { Empty, Endpoint, OBJECT_ID } from '..';
 
+export type CollectionStatus = 'active' | 'inactive';
 export type CollectionRole = 'admin' | 'moderator' | 'viewer';
+
 export type Collection = {
     id: OBJECT_ID;
     info: {
+        /**
+         * The name of the collection (aka title)
+         */
         name: string;
+
+        /**
+         * A unique slug identifier for the collection
+         */
         slug: string;
-        status: string;
+
+        /**
+         * Status of the collection
+         */
+        status: CollectionStatus;
+
+        /**
+         * What the collection is about
+         */
         description?: string;
     };
     assets: {
+        /**
+         * The icon of the collection
+         * 
+         * Also known as favicon
+         */
         icon: string;
+
+        /**
+         * The thumbnail of the collection
+         * 
+         * This is the cover image of the collection
+         */
         thumbnail: string;
     };
-    links: {
-        url: string;
-        inviteLink?: string;
-    };
     config: {
+        /**
+         * Whether the collection is private or not
+         * 
+         * If it's private, only the owner and the members can view it
+         */
         isPrivate: boolean;
+
+        /**
+         * Whether the collection allows public join
+         * 
+         * If it's true, anyone with can join the collection
+         * 
+         * Only available if the collection is not private
+         */
         allowPublicJoin: boolean;
     };
     meta: {
+        /**
+         * Number of times the collection has been viewed
+         * 
+         * Updated whenever a call is made to the `/collections/:id` endpoint
+         */
         views: number;
     };
+
+    /**
+     * The time the collection was created
+     */
     createdAt: Date;
+
+    /**
+     * The last time the collection was updated
+     */
     updatedAt: Date;
+
+    /**
+     * The ID of the user who created the collection
+     */
     owner: OBJECT_ID;
+
+    /**
+     * The ID of the parent collection (if it's a sub-collection)
+     */
     parent: OBJECT_ID;
+
+    /**
+     * The ID of the user who last updated the collection
+     */
     updatedBy: OBJECT_ID;
+
+    /**
+     * Number of bookmarks in the collection (defaults to 0 if not present)
+     */
     bookmarkCount: number;
+
+    /**
+     * Whether the collection has been liked by whoever fetches it
+     */
     isLiked: boolean;
+
+    /**
+     * Role of the user who fetched the collection
+     */
     role: CollectionRole;
 
+    /**
+     * (Optional) Profile of the user who created the collection
+     */
     ownerProfile?: UserProfile;
 };
 
