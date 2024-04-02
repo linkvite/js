@@ -1,4 +1,5 @@
 import type {
+	AuthEndpoints,
 	BookmarkEndpoints,
 	CollectionEndpoints,
 	Method,
@@ -57,4 +58,8 @@ export type Endpoint<
  * Extract an endpoint from a given method and path
  * @public
  */
-export type Endpoints = UserEndpoints | BookmarkEndpoints | CollectionEndpoints;
+export type Endpoints =
+	| UserEndpoints
+	| BookmarkEndpoints
+	| CollectionEndpoints
+	| AuthEndpoints;

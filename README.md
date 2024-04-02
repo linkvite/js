@@ -38,7 +38,7 @@ const invite = await linkvite.invites.create({
 	collection: 'id-of-my-collection',
 	recipients: ['john-doe', 'jane@doe.com'], // usernames or emails
 	message: 'Check out my collection!',
-	role: 'viewer', // viewer, moderator, or admin. defaults to viewer.
+	role: 'viewer', // viewer, or admin. defaults to viewer.
 });
 ```
 

@@ -1,6 +1,5 @@
-import type {OBJECT_ID} from '.';
 import type {UserProfile} from './user';
-import type {BookmarkRole} from './bookmark';
+import type {OBJECT_ID, RoleLevel} from '.';
 
 export type CommentStatus = 'active' | 'hidden' | 'deleted';
 
@@ -14,7 +13,7 @@ export type Comment = {
 	createdAt: Date;
 	updatedAt: Date;
 	isLiked: boolean;
-	role: BookmarkRole;
+	role: RoleLevel;
 	likesCount: number;
 	repliesCount: number;
 
