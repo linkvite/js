@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "⏳ Running pre-commit hook..."
+
+pnpm lint
+# pnpm test
+
+echo "✅ Done running pre-commit hook."
+
+exit 0

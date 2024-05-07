@@ -41,12 +41,14 @@
 		"lint": "exec prettier . --write",
 		"package": "pnpm build && pnpm pack",
 		"publish:pkg": "pnpm build && pnpm publish --access public",
-		"publish:dev": "pnpm build && npm link"
+		"publish:dev": "pnpm build && npm link",
+		"prepare": "husky"
 	},
 	"devDependencies": {
 		"@changesets/cli": "^2.27.1",
 		"@types/node": "18.15.5",
 		"dotenv": "16.0.3",
+		"husky": "^9.0.11",
 		"prettier": "2.8.6",
 		"tsup": "8.0.1",
 		"typescript": "^5.0.2"
