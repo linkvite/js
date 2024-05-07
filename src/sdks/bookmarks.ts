@@ -1,6 +1,7 @@
 import type {
 	BookmarkFileEntry,
 	BookmarkPagination,
+	BookmarkTabsEntry,
 	ImageUploadType,
 	ManualBookmarkEntry,
 	ManualBookmarkEntryPayload,
@@ -25,12 +26,12 @@ export const bookmarks = sdk(client => ({
 	},
 
 	/**
-	 * Get the article content of a bookmark
+	 * Get the reader (article) content of a bookmark
 	 *
 	 * @param {String} id - The ID of the bookmark
 	 */
-	async getArticle(id: string) {
-		return await client.get('v1/bookmarks/:id/article', {id});
+	async getReader(id: string) {
+		return await client.get('v1/bookmarks/:id/reader', {id});
 	},
 
 	/**
@@ -45,8 +46,8 @@ export const bookmarks = sdk(client => ({
 	 *
 	 * @param {String} url - The URL of the bookmark
 	 */
-	async exists(url: string) {
-		return await client.post('v1/bookmarks/exists', {url}, {});
+	async exists(url: string, collection: string | null = null) {
+		return await client.post('v1/bookmarks/exists', {url, collection}, {});
 	},
 
 	/**
@@ -94,27 +95,10 @@ export const bookmarks = sdk(client => ({
 		collection: string | null = null,
 	) {
 		return await client.post(
-			'v1/bookmarks/from-parsed-data',
+			'v1/bookmarks/from-parsed-link',
 			{data, collection},
 			{},
 		);
-	},
-
-	/**
-	 * Create a new bookmark from manual data
-	 */
-	async createFromEntry(data: ManualBookmarkEntry) {
-		let payload = {} as ManualBookmarkEntryPayload;
-
-		data.tags
-			? (payload = {...data, tags: data.tags.join(',')})
-			: (payload = data as unknown as ManualBookmarkEntryPayload);
-
-		if (data.cover) {
-			payload = {...payload, coverType: 'default'};
-		}
-
-		return await client.post('v1/bookmarks/manual', payload, {});
 	},
 
 	/**
@@ -141,6 +125,30 @@ export const bookmarks = sdk(client => ({
 		}
 
 		return await client.post('v1/bookmarks/file', formData, {});
+	},
+
+	/**
+	 * Create a new bookmark from browser extension tabs upload
+	 */
+	async createFromTabs(data: BookmarkTabsEntry) {
+		return await client.post('v1/bookmarks/tabs', data, {});
+	},
+
+	/**
+	 * Create a new bookmark from manual data
+	 */
+	async createFromEntry(data: ManualBookmarkEntry) {
+		let payload = {} as ManualBookmarkEntryPayload;
+
+		data.tags
+			? (payload = {...data, tags: data.tags.join(',')})
+			: (payload = data as unknown as ManualBookmarkEntryPayload);
+
+		if (data.cover) {
+			payload = {...payload, coverType: 'default'};
+		}
+
+		return await client.post('v1/bookmarks/manual', payload, {});
 	},
 
 	/**

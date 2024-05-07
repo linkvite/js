@@ -79,6 +79,13 @@ export type Collection = {
 	updatedAt: Date;
 
 	/**
+	 * The last time the collection was opened
+	 *
+	 * Updated whenever a call is made to the `/collections/:id` endpoint
+	 */
+	lastOpened: Date;
+
+	/**
 	 * The ID of the user who created the collection
 	 */
 	owner: OBJECT_ID;
