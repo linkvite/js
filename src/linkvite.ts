@@ -1,3 +1,4 @@
+import {apiKeys} from './sdks/api_keys';
 import {user, bookmarks, collections} from './sdks';
 import {APIClient, type APIClientOptions} from './rest';
 
@@ -22,6 +23,7 @@ export class Linkvite {
 	public readonly user;
 	public readonly bookmarks;
 	public readonly collections;
+	public readonly apiKeys;
 
 	constructor(optionsOrKey: string | APIClientOptions) {
 		if (
@@ -46,5 +48,6 @@ export class Linkvite {
 		this.user = user(this.client);
 		this.bookmarks = bookmarks(this.client);
 		this.collections = collections(this.client);
+		this.apiKeys = apiKeys(this.client);
 	}
 }

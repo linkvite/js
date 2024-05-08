@@ -94,7 +94,7 @@ export class APIClient {
 		init?: RequestInit,
 	) {
 		return this.request<
-			T & Extract<Endpoints, {method: 'GET'; path: Path}>['res']['data']
+			T & Extract<Endpoints, {method: 'GET'; path: Path}>['res']
 		>('GET', path, undefined, query, init);
 	}
 

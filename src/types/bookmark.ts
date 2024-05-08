@@ -316,26 +316,22 @@ export type UpdateBookmarkEntry = BookmarkEntry & {
 };
 
 export type BookmarkEndpoints =
-	| Endpoint<'GET', 'v1/bookmarks/:id', {data: Bookmark}>
-	| Endpoint<'GET', 'v1/bookmarks/:id/reader', {data: BookmarkReader}>
+	| Endpoint<'GET', 'v1/bookmarks/:id', Bookmark>
+	| Endpoint<'GET', 'v1/bookmarks/:id/reader', BookmarkReader>
 	| Endpoint<
 			'GET',
 			'v1/bookmarks',
 			{
-				data: {
-					bookmarks: Bookmark[];
-					pagination: Pagination;
-				};
+				bookmarks: Bookmark[];
+				pagination: Pagination;
 			}
 	  >
 	| Endpoint<
 			'POST',
 			'v1/bookmarks/exists',
 			{
-				data: {
-					exists: boolean;
-					bookmark: Bookmark;
-				};
+				exists: boolean;
+				bookmark: Bookmark;
 			},
 			{url: string; collection: string | null}
 	  >
@@ -343,19 +339,17 @@ export type BookmarkEndpoints =
 			'GET',
 			'v1/bookmarks/from-collection/:id',
 			{
-				data: {
-					bookmarks: Bookmark[];
-					pagination: Pagination;
-					collection: string;
-				};
+				bookmarks: Bookmark[];
+				pagination: Pagination;
+				collection: string;
 			}
 	  >
-	| Endpoint<'GET', 'v1/bookmarks/:id/archive', {data: string}>
+	| Endpoint<'GET', 'v1/bookmarks/:id/archive', string>
 	| Endpoint<'POST', 'v1/bookmarks/:id/archive', string>
 	| Endpoint<
 			'POST',
 			'v1/bookmarks',
-			{data: Bookmark},
+			Bookmark,
 			{
 				url: string;
 				collection: string | null;
@@ -364,22 +358,22 @@ export type BookmarkEndpoints =
 	| Endpoint<
 			'POST',
 			'v1/bookmarks/from-parsed-link',
-			{data: Bookmark},
+			Bookmark,
 			{
 				data: ParsedLinkData;
 				collection: string | null;
 			}
 	  >
-	| Endpoint<'POST', 'v1/bookmarks/file', {data: Bookmark}, FormData>
-	| Endpoint<'POST', 'v1/bookmarks/tabs', {data: Bookmark}, BookmarkTabsEntry>
+	| Endpoint<'POST', 'v1/bookmarks/file', Bookmark, FormData>
+	| Endpoint<'POST', 'v1/bookmarks/tabs', Bookmark, BookmarkTabsEntry>
 	| Endpoint<
 			'POST',
 			'v1/bookmarks/manual',
-			{data: Bookmark},
+			Bookmark,
 			ManualBookmarkEntryPayload
 	  >
-	| Endpoint<'POST', 'v1/bookmarks/:id/re-parse', {data: ParsedLinkData}>
-	| Endpoint<'POST', 'v1/bookmarks/:id/like', Empty>
+	| Endpoint<'POST', 'v1/bookmarks/:id/re-parse', ParsedLinkData>
+	| Endpoint<'POST', 'v1/bookmarks/:id/like', boolean>
 	| Endpoint<
 			'POST',
 			'v1/bookmarks/batch-like',
@@ -390,6 +384,6 @@ export type BookmarkEndpoints =
 			}
 	  >
 	| Endpoint<'PATCH', 'v1/bookmarks/batch-edit', Empty, UpdateBookmarksEntry>
-	| Endpoint<'PATCH', 'v1/bookmarks/:id', {data: Bookmark}, UpdateBookmarkEntry>
-	| Endpoint<'PATCH', 'v1/bookmarks/:id/cover', {data: Bookmark}, FormData>
+	| Endpoint<'PATCH', 'v1/bookmarks/:id', Bookmark, UpdateBookmarkEntry>
+	| Endpoint<'PATCH', 'v1/bookmarks/:id/cover', Bookmark, FormData>
 	| Endpoint<'DELETE', 'v1/bookmarks/:id', Empty>;

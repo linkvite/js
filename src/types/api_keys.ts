@@ -1,3 +1,4 @@
+import type {Endpoint} from '../rest';
 import type {OBJECT_ID} from './generic';
 export type APIStatus = 'active' | 'inactive';
 
@@ -48,3 +49,10 @@ export type APIKey = {
 	 */
 	usageCount: number;
 };
+
+export type CreateOrUpdateAPIKeyEntry = {name: string};
+
+export type APIKeyEndpoints =
+	| Endpoint<'GET', 'v1/api-keys', APIKey[]>
+	| Endpoint<'POST', 'v1/api-keys', APIKey, CreateOrUpdateAPIKeyEntry>
+	| Endpoint<'PATCH', 'v1/api-keys/:id', APIKey, CreateOrUpdateAPIKeyEntry>;

@@ -154,28 +154,28 @@ export type MoveOrRemoveCollectionEntry =
 			remove: boolean;
 	  };
 
+export type CollectionOnlinePresence = {
+	totalMembers: number;
+	onlineClients: number;
+	onlineMembers: number;
+};
+
 export type CollectionEndpoints =
-	| Endpoint<'GET', 'v1/collections', {data: Collection[]}>
-	| Endpoint<'GET', 'v1/collections/all', {data: Collection[]}>
-	| Endpoint<'GET', 'v1/collections/:id', {data: Collection}>
+	| Endpoint<'GET', 'v1/collections/:id/presence', CollectionOnlinePresence>
+	| Endpoint<'GET', 'v1/collections', Collection[]>
+	| Endpoint<'GET', 'v1/collections/all', Collection[]>
+	| Endpoint<'GET', 'v1/collections/:id', Collection>
 	| Endpoint<
 			'GET',
 			'v1/collections/:id/members',
 			{
-				data: {
-					owner: UserProfile;
-					admins: UserProfile[];
-					viewers: UserProfile[];
-				};
+				owner: UserProfile;
+				admins: UserProfile[];
+				viewers: UserProfile[];
 			}
 	  >
-	| Endpoint<
-			'POST',
-			'v1/collections',
-			{data: Collection},
-			CreateCollectionEntry
-	  >
-	| Endpoint<'POST', 'v1/collections/:id/like', {data: boolean}>
+	| Endpoint<'POST', 'v1/collections', Collection, CreateCollectionEntry>
+	| Endpoint<'POST', 'v1/collections/:id/like', boolean>
 	| Endpoint<
 			'POST',
 			'v1/collections/:id/send-invite',
@@ -189,12 +189,7 @@ export type CollectionEndpoints =
 			Empty,
 			MoveOrRemoveCollectionEntry
 	  >
-	| Endpoint<
-			'PATCH',
-			'v1/collections/:id',
-			{data: Collection},
-			UpdateCollectionEntry
-	  >
-	| Endpoint<'PATCH', 'v1/collections/:id/cover', {data: Collection}, FormData>
+	| Endpoint<'PATCH', 'v1/collections/:id', Collection, UpdateCollectionEntry>
+	| Endpoint<'PATCH', 'v1/collections/:id/cover', Collection, FormData>
 	| Endpoint<'PATCH', 'v1/collections/:id/edit-role', Empty, EditUserRoleEntry>
 	| Endpoint<'DELETE', 'v1/collections/:id', Empty>;

@@ -65,15 +65,10 @@ export type UpdateUserEntry = {
 };
 
 export type UserEndpoints =
-	| Endpoint<'GET', 'v1/user', {data: User}>
-	| Endpoint<'GET', 'v1/user/storage', {data: UserStorage}>
-	| Endpoint<'PATCH', 'v1/user', {data: User}, UpdateUserEntry>
-	| Endpoint<'PATCH', 'v1/user/avatar', {data: User}, FormData>
-	| Endpoint<'GET', 'v1/user/settings', {data: UserSettings}>
-	| Endpoint<
-			'PATCH',
-			'v1/user/settings',
-			{data: UserSettings},
-			Partial<UserSettings>
-	  >
+	| Endpoint<'GET', 'v1/user', User>
+	| Endpoint<'GET', 'v1/user/storage', UserStorage>
+	| Endpoint<'PATCH', 'v1/user', User, UpdateUserEntry>
+	| Endpoint<'PATCH', 'v1/user/avatar', User, FormData>
+	| Endpoint<'GET', 'v1/user/settings', UserSettings>
+	| Endpoint<'PATCH', 'v1/user/settings', UserSettings, Partial<UserSettings>>
 	| Endpoint<'DELETE', 'v1/user/trash', Empty>;

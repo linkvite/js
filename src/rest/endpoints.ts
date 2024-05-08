@@ -1,4 +1,5 @@
 import type {
+	APIKeyEndpoints,
 	AuthEndpoints,
 	BookmarkEndpoints,
 	CollectionEndpoints,
@@ -62,4 +63,5 @@ export type Endpoints =
 	| UserEndpoints
 	| BookmarkEndpoints
 	| CollectionEndpoints
-	| AuthEndpoints;
+	| AuthEndpoints
+	| APIKeyEndpoints;
