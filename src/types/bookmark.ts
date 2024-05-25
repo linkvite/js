@@ -1,15 +1,10 @@
 import type {Endpoint} from '../rest';
-import type {UserProfile} from './user';
 import type {RoleLevel} from './collection';
-import type {Empty, OBJECT_ID, Pagination, PaginationRequest} from './generic';
+import type {Empty, Pagination, PaginationRequest} from './generic';
 
 export type BookmarkPath = 'all' | 'starred' | 'trashed';
 export type BookmarkStatus = 'active' | 'trashed' | 'deleted';
-export type BookmarkArchiveStatus =
-	| 'requested'
-	| 'pending'
-	| 'success'
-	| 'failed';
+export type BookmarkArchiveStatus = 'pending' | 'success' | 'failed';
 export type BookmarkType =
 	| 'image'
 	| 'video'
@@ -19,28 +14,29 @@ export type BookmarkType =
 	| 'application'
 	| 'website';
 
-export type BookmarkMimeType =
-	| 'text/html'
-	| 'text/plain'
-	| 'image/jpg'
-	| 'image/jpeg'
-	| 'image/png'
-	| 'image/gif'
-	| 'image/webp'
-	| 'image/svg+xml'
-	| 'image/bmp'
-	| 'audio/mpeg'
-	| 'audio/wav'
-	| 'audio/ogg'
-	| 'audio/x-m4a'
-	| 'audio/mp4'
-	| 'video/mp4'
-	| 'video/webm'
-	| 'application/pdf'
-	| 'application/zip' // no preview
-	| 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' // no preview
-	| 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // no preview
-	| 'application/vnd.openxmlformats-officedocument.presentationml.presentation'; // no preview
+enum BookmarkMimeType {
+	'text/html' = 0,
+	'text/plain' = 1,
+	'application/pdf' = 2,
+	'application/zip' = 3,
+	'application/vnd.openxmlformats-officedocument.wordprocessingml.document' = 4,
+	'application/vnd.openxmlformats-officedocument.presentationml.presentation' = 5,
+	'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' = 6,
+	'image/jpg' = 7,
+	'image/jpeg' = 8,
+	'image/png' = 9,
+	'image/gif' = 10,
+	'image/webp' = 11,
+	'image/svg+xml' = 12,
+	'image/bmp' = 13,
+	'audio/mpeg' = 14,
+	'audio/wav' = 15,
+	'audio/ogg' = 16,
+	'audio/x-m4a' = 17,
+	'audio/mp4' = 18,
+	'video/mp4' = 19,
+	'video/webm' = 20,
+}
 
 export type BookmarkPagination = PaginationRequest & {
 	sort?: string;
@@ -59,197 +55,229 @@ export type ImportItem = {
 };
 
 export type Bookmark = {
-	id: OBJECT_ID;
-	info: {
-		/**
-		 * The name of the bookmark (aka title)
-		 */
-		name: string;
-
-		/**
-		 * A unique slug identifier for the bookmark
-		 */
-		slug: string;
-
-		/**
-		 * The location of the bookmark
-		 *
-		 * if it's '0000000000000', it has no location
-		 */
-		collection: OBJECT_ID;
-
-		/**
-		 * Description of the bookmark
-		 */
-		description?: string;
-
-		/**
-		 * Status of the bookmark
-		 */
-		status: BookmarkStatus;
-	};
-
 	/**
-	 * An array of tag names, eg: ['tag1', 'tag2']
+	 * A prefixed string of the bookmark ID
 	 *
-	 * They should be unique.
+	 * Always prefixed with `bmk_`
 	 */
-	tags: string[];
-
-	assets: {
-		/**
-		 * The icon of the bookmark
-		 *
-		 * Also known as favicon
-		 */
-		icon: string;
-
-		/**
-		 * Cover image of the bookmark
-		 */
-		thumbnail: string;
-	};
-	config: {
-		/**
-		 * If it's not a file, and we can't access it,
-		 * then it's a broken bookmark
-		 *
-		 * Careful with this, our fetcher might not be able
-		 * to access it's content
-		 */
-		isBroken: boolean;
-
-		/**
-		 * Whether commenting is allowed for this bookmark
-		 */
-		allowComments: boolean;
-	};
-	meta: {
-		/**
-		 * The URL of the bookmark
-		 */
-		url: string;
-
-		/**
-		 * If it's a file, it has a key used to find the path
-		 * where it's stored in the cloud
-		 */
-		key: string;
-
-		/**
-		 * It's a file if the size is greater than 0
-		 *
-		 * Size in bytes.
-		 */
-		size: number;
-
-		/**
-		 * Number of times the bookmark has been opened
-		 *
-		 * Updated whenever a call is made to the `/bookmarks/:id` endpoint
-		 */
-		views: number;
-
-		/**
-		 * Linkvite's own type
-		 *
-		 * Used internally for filtering.
-		 */
-		type: BookmarkType;
-
-		/**
-		 * Generic mime type
-		 */
-		mimeType: BookmarkMimeType;
-	};
-	archive: {
-		/**
-		 * If it has been archived, it has a size
-		 *
-		 * Size in bytes.
-		 */
-		size: number;
-
-		/**
-		 * Date when it was archived
-		 */
-		createdAt: Date;
-
-		/**
-		 * Status of the archive
-		 *
-		 * Requested: The archive has been requested
-		 *
-		 * Pending: No action has been taken yet
-		 *
-		 * Success: The archive has been processed
-		 *
-		 * Failed: The archive failed
-		 */
-		status: BookmarkArchiveStatus;
-	};
-
-	/**
-	 * Date when the bookmark was created
-	 */
-	createdAt: Date;
-
-	/**
-	 * Date when the bookmark was last updated
-	 */
-	updatedAt: Date;
-
-	/**
-	 * Last time the bookmark was opened
-	 *
-	 * Updated whenever a call is made to the `/bookmarks/:id` endpoint
-	 *
-	 * or anytime the bookmark was updated.
-	 */
-	lastOpened: Date;
-
-	/**
-	 * The ID of the user who last updated the bookmark
-	 */
-	updatedBy: OBJECT_ID;
+	id: string;
 
 	/**
 	 * The ID of the user who created the bookmark
 	 */
-	owner: OBJECT_ID;
+	user_id: string;
 
 	/**
-	 * Whether the bookmark has been liked by whoever fetches it
+	 * The title of the bookmark
 	 */
-	isLiked: boolean;
+	title: string;
 
 	/**
-	 * Role of the user who fetched the bookmark
+	 * A description of the bookmark
+	 *
+	 * This can be empty
 	 */
-	role: RoleLevel;
+	description: string;
 
 	/**
-	 * Is the metadata of the bookmark still being fetched?
+	 * The ID of the collection the bookmark is in
+	 *
+	 * If the bookmark is not in a collection, this will be `null`
+	 */
+	collection_id: string | null;
+
+	/**
+	 * Status of the bookmark
+	 *
+	 * - `active` - The bookmark is active
+	 * - `trashed` - The bookmark is in the trash
+	 * - `deleted` - The bookmark is deleted - waiting to be purged
+	 */
+	status: BookmarkStatus;
+
+	/**
+	 * Whether the bookmark is broken
+	 *
+	 * A bookmark is considered broken if the URL is not reachable
+	 */
+	is_broken: boolean;
+
+	/**
+	 * If comments are allowed on the bookmark
+	 */
+	allow_comments: boolean;
+
+	/**
+	 * A string of unique tags separated by commas
+	 *
+	 * ex. `tag1,tag2,tag3`
+	 */
+	tags: string;
+
+	/**
+	 * A small icon representing the bookmark
+	 *
+	 * Also used as the favicon
+	 */
+	icon: string;
+
+	/**
+	 * The cover image of the bookmark
+	 */
+	thumbnail: string;
+
+	/**
+	 * If the bookmark is currently being processed
+	 *
+	 * As in, the bookmark is being fetched and parsed
+	 *
+	 * Changes made while processing can be overwritten.
 	 */
 	processing: boolean;
 
 	/**
-	 * (Optional) Profile of the user who created the bookmark
+	 * A string representing the type of bookmark
 	 */
-	ownerProfile?: UserProfile;
+	type: BookmarkType;
 
 	/**
-	 * (Optional) The old collection ID if it was moved
+	 * An internal ID representing the MIME type of the bookmark
+	 *
+	 * This is used to determine how the bookmark is displayed
 	 */
-	oldCollection?: OBJECT_ID;
+	mime_type_id: BookmarkMimeType;
+
+	/**
+	 * A link to the bookmark
+	 */
+	url: string;
+
+	/**
+	 * Size of the bookmark in bytes
+	 *
+	 * If it's greater than 0, the bookmark is considered a file.
+	 */
+	size: number;
+
+	/**
+	 * Number of times the bookmark has been viewed
+	 */
+	views: number;
+
+	/**
+	 * ID of the user who last updated the bookmark
+	 */
+	updated_by_id: string | null;
+
+	/**
+	 * Date the bookmark was last updated
+	 */
+	updated_at: Date;
+
+	/**
+	 * Date the bookmark was created
+	 */
+	created_at: Date;
+
+	/**
+	 * Date the bookmark was last opened
+	 */
+	last_opened_at: Date | null;
+
+	/**
+	 * Archive status of the bookmark
+	 *
+	 * - `pending` - An archive has been requested or is in progress
+	 * - `success` - The archive was successful, and the bookmark is archived
+	 * - `failed` - The archive failed
+	 */
+	archive_status: BookmarkArchiveStatus;
+
+	/**
+	 * Size of the archive in bytes
+	 */
+	archive_size: number;
+
+	/**
+	 * If the bookmark is starred
+	 */
+	starred: boolean;
+
+	/**
+	 * The role of the user who is viewing the bookmark
+	 *
+	 * Note that owners will always have a role of `admin`
+	 *
+	 * To check if the user is the owner, compare the user's id to `bookmark.user_id`
+	 */
+	role: RoleLevel;
+
+	/**
+	 * The ID of the user who owns the bookmark
+	 *
+	 * This is the same as `user_id`
+	 */
+	owner_id: string;
+
+	/**
+	 * The name of the user who owns the bookmark
+	 */
+	owner_name: string;
+
+	/**
+	 * The username of the user who owns the bookmark
+	 */
+	owner_username: string;
+
+	/**
+	 * The display picture of the user who owns the bookmark
+	 */
+	owner_avatar: string;
+
+	/**
+	 * Name of the collection the bookmark is in
+	 */
+	collection_name: string | null;
+
+	/**
+	 * If the bookmark was recently moved to a different collection
+	 *
+	 * This will be the ID of the old collection
+	 *
+	 * This field will be removed after a short period, so it's best to use it immediately
+	 */
+	old_collection_id?: string;
 };
 
 export type BookmarkReader = {
+	/**
+	 * The URL of the article
+	 */
 	url: string;
+
+	/**
+	 * The title of the article
+	 */
 	title: string;
+
+	/**
+	 * The author of the article
+	 *
+	 * This can be an empty string
+	 */
 	byline: string;
+
+	/**
+	 * The HTML content of the article
+	 *
+	 * This is wrapped with a div with id `readability-page-1`
+	 */
 	content: string;
-	textContent: string;
+
+	/**
+	 * The text content of the article
+	 */
+	text_content: string;
 };
 
 export type ParsedLinkData = {
@@ -373,10 +401,10 @@ export type BookmarkEndpoints =
 			ManualBookmarkEntryPayload
 	  >
 	| Endpoint<'POST', 'v1/bookmarks/:id/re-parse', ParsedLinkData>
-	| Endpoint<'POST', 'v1/bookmarks/:id/like', boolean>
+	| Endpoint<'POST', 'v1/bookmarks/:id/star', boolean>
 	| Endpoint<
 			'POST',
-			'v1/bookmarks/batch-like',
+			'v1/bookmarks/batch-star',
 			Empty,
 			{
 				value: boolean;

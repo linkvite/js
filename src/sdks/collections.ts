@@ -56,15 +56,6 @@ export const collections = sdk(client => ({
 	},
 
 	/**
-	 * Toggle the liking a collection
-	 *
-	 * @param {String} id - The ID of the collection
-	 */
-	async toggleLike(id: string) {
-		return await client.post('v1/collections/:id/like', undefined, {id});
-	},
-
-	/**
 	 * Invite a user to a collection
 	 *
 	 * @param {String} id - The ID of the collection

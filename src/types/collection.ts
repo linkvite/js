@@ -1,124 +1,137 @@
-import type {UserProfile} from './user';
-import type {Empty, Endpoint, OBJECT_ID} from '..';
+import type {SubProfile} from './user';
+import type {Empty, Endpoint} from '..';
 
 export type RoleLevel = 'admin' | 'viewer';
 export type CollectionStatus = 'active' | 'inactive';
 
 export type Collection = {
-	id: OBJECT_ID;
-	info: {
-		/**
-		 * The name of the collection (aka title)
-		 */
-		name: string;
-
-		/**
-		 * A unique slug identifier for the collection
-		 */
-		slug: string;
-
-		/**
-		 * Status of the collection
-		 */
-		status: CollectionStatus;
-
-		/**
-		 * What the collection is about
-		 */
-		description?: string;
-	};
-	assets: {
-		/**
-		 * The icon of the collection
-		 *
-		 * Also known as favicon
-		 */
-		icon: string;
-
-		/**
-		 * The thumbnail of the collection
-		 *
-		 * This is the cover image of the collection
-		 */
-		thumbnail: string;
-	};
-	config: {
-		/**
-		 * Whether the collection is private or not
-		 *
-		 * If it's private, only the owner and the members can view it
-		 */
-		isPrivate: boolean;
-
-		/**
-		 * Whether the collection allows public join
-		 *
-		 * If it's true, anyone with can join the collection
-		 *
-		 * Only available if the collection is not private
-		 */
-		allowPublicJoin: boolean;
-	};
-	meta: {
-		/**
-		 * Number of times the collection has been viewed
-		 *
-		 * Updated whenever a call is made to the `/collections/:id` endpoint
-		 */
-		views: number;
-	};
-
 	/**
-	 * The time the collection was created
-	 */
-	createdAt: Date;
-
-	/**
-	 * The last time the collection was updated
-	 */
-	updatedAt: Date;
-
-	/**
-	 * The last time the collection was opened
+	 * The public ID of the collection
 	 *
-	 * Updated whenever a call is made to the `/collections/:id` endpoint
+	 * Always prefixed with `coll_`
 	 */
-	lastOpened: Date;
+	id: string;
 
 	/**
 	 * The ID of the user who created the collection
 	 */
-	owner: OBJECT_ID;
+	user_id: string;
 
 	/**
-	 * The ID of the parent collection (if it's a sub-collection)
+	 * The name of the collection
 	 */
-	parent: OBJECT_ID;
+	name: string;
+
+	/**
+	 * A description of the collection
+	 *
+	 * This can be an empty string
+	 */
+	description: string;
+
+	/**
+	 * The status of the collection
+	 *
+	 * - `active` - The collection is active
+	 * - `inactive` - The collection is inactive, either waiting to be deleted or suspended
+	 */
+	status: CollectionStatus;
+
+	/**
+	 * Whether the collection is private
+	 *
+	 * If the collection is private, only members can view it
+	 *
+	 * If the collection is public, anyone can view via the user's profile
+	 */
+	is_private: boolean;
+
+	/**
+	 * If the collection is public, whether anyone can join
+	 *
+	 * Any user can join a public collection if this is true
+	 */
+	allow_public_join: boolean;
+
+	/**
+	 * The icon of the collection
+	 *
+	 * This can be an emoji or a URL to an image
+	 */
+	icon: string;
+
+	/**
+	 * A cover image for the collection
+	 */
+	thumbnail: string;
+
+	/**
+	 * The amount of times the collection has been viewed
+	 */
+	views: number;
+
+	/**
+	 * The ID of parent collection if this is a sub-collection (nested collection)
+	 *
+	 * If the collection is a root collection, this will be `null`
+	 */
+	parent_id: string | null;
 
 	/**
 	 * The ID of the user who last updated the collection
 	 */
-	updatedBy: OBJECT_ID;
+	updated_by_id: string | null;
 
 	/**
-	 * Number of bookmarks in the collection (defaults to 0 if not present)
+	 * The date the collection was created
 	 */
-	bookmarkCount: number;
+	created_at: Date;
 
 	/**
-	 * Whether the collection has been liked by whoever fetches it
+	 * The date the collection was last updated
 	 */
-	isLiked: boolean;
+	updated_at: Date;
 
 	/**
-	 * Role of the user who fetched the collection
+	 * The date the collection was last opened
+	 */
+	last_opened_at: Date | null;
+
+	/**
+	 * The role of the user who is viewing the collection
+	 *
+	 * Note that owners will always have a role of `admin`
+	 *
+	 * To check if the user is the owner, compare the user's id to `collection.user_id`
 	 */
 	role: RoleLevel;
 
 	/**
-	 * (Optional) Profile of the user who created the collection
+	 * The ID of the user who owns the collection
 	 */
-	ownerProfile?: UserProfile;
+	owner_id: string;
+
+	/**
+	 * The name of the user who owns the collection
+	 */
+	owner_name: string;
+
+	/**
+	 * The username of the user who owns the collection
+	 */
+	owner_username: string;
+
+	/**
+	 * The display picture of the user who owns the collection
+	 */
+	owner_avatar: string;
+
+	/**
+	 * The number of bookmarks in the collection
+	 *
+	 * This can be unstable and return 0
+	 */
+	bookmarks_count: number;
 };
 
 export type UpdateCollectionEntry = {
@@ -140,11 +153,15 @@ export type InviteToCollectionEntry = {
 	role: RoleLevel;
 };
 
-export type EditUserRoleEntry = {
-	userID: string;
-	role: RoleLevel;
-	remove?: boolean;
-};
+export type EditUserRoleEntry =
+	| {
+			user_id: string;
+			remove: boolean;
+	  }
+	| {
+			user_id: string;
+			role: RoleLevel;
+	  };
 
 export type MoveOrRemoveCollectionEntry =
 	| {
@@ -169,13 +186,12 @@ export type CollectionEndpoints =
 			'GET',
 			'v1/collections/:id/members',
 			{
-				owner: UserProfile;
-				admins: UserProfile[];
-				viewers: UserProfile[];
+				role: RoleLevel;
+				owner_id: string;
+				members: SubProfile[];
 			}
 	  >
 	| Endpoint<'POST', 'v1/collections', Collection, CreateCollectionEntry>
-	| Endpoint<'POST', 'v1/collections/:id/like', boolean>
 	| Endpoint<
 			'POST',
 			'v1/collections/:id/send-invite',

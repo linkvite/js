@@ -5,12 +5,6 @@
 export type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 /**
- * Mongo DB Object ID
- * @public
- */
-export type OBJECT_ID = string;
-
-/**
  * Image upload type
  * @public
  */
@@ -38,7 +32,7 @@ export type Pagination = {
 	page: number;
 	total: number;
 	limit: number;
-	lastPage: number;
+	last_page: number;
 	q?: string;
 };
 

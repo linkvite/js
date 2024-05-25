@@ -161,22 +161,22 @@ export const bookmarks = sdk(client => ({
 	},
 
 	/**
-	 * Toggle the liking a bookmark
+	 * Toggle the star status of a bookmark
 	 *
 	 * @param {String} id - The ID of the bookmark
 	 */
-	async toggleLike(id: string) {
-		return await client.post('v1/bookmarks/:id/like', undefined, {id});
+	async toggleStar(id: string) {
+		return await client.post('v1/bookmarks/:id/star', undefined, {id});
 	},
 
 	/**
-	 * Batch like/unlike bookmarks
+	 * Batch toggle the star status of bookmarks
 	 *
 	 * @param {String[]} bookmarks - The IDs of the bookmarks
-	 * @param {Boolean} liked - Whether to like or unlike the bookmarks
+	 * @param {Boolean} star - Whether to star or unstar the bookmarks
 	 */
-	async batchToggleLike(bookmarks: string[], value: boolean) {
-		return await client.post('v1/bookmarks/batch-like', {bookmarks, value}, {});
+	async batchToggleStar(bookmarks: string[], value: boolean) {
+		return await client.post('v1/bookmarks/batch-star', {bookmarks, value}, {});
 	},
 
 	/**

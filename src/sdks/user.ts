@@ -1,5 +1,5 @@
 import {sdk} from './create';
-import type {ImageUploadType, UpdateUserEntry, UserSettings} from '../types';
+import type {ImageUploadType, UpdateUserEntry} from '../types';
 
 /**
  * Users SDK client
@@ -66,22 +66,6 @@ export const user = sdk(client => ({
 		}
 
 		return await client.patch('v1/user/avatar', formData, {});
-	},
-
-	/**
-	 * Get the current user's settings
-	 */
-	async getSettings() {
-		return await client.get('v1/user/settings', {});
-	},
-
-	/**
-	 * Update the current user's settings
-	 *
-	 * @param {Partial<UserSettings>} data - The data to update the user's settings with
-	 */
-	async updateSettings(data: Partial<UserSettings>) {
-		return await client.patch('v1/user/settings', data, {});
 	},
 
 	/**
