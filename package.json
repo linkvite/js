@@ -35,7 +35,7 @@
 	],
 	"scripts": {
 		"build": "rm -rf dist && tsup && node ./build/copy.js",
-        "pre-release": "pnpm changeset",
+		"pre-release": "pnpm changeset",
 		"release": "pnpm build && pnpm changeset publish",
 		"fullbuild": "pnpm build && pnpm docs",
 		"test": "tsx tests/index.ts",
