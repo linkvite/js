@@ -1,6 +1,6 @@
 {
 	"name": "@linkvite/js",
-	"version": "0.4.0",
+	"version": "1.0.0",
 	"type": "module",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",
@@ -35,7 +35,7 @@
 	],
 	"scripts": {
 		"build": "rm -rf dist && tsup && node ./build/copy.js",
-		"pre-release": "pnpm changeset",
+		"pre-release": "pnpm changeset version",
 		"release": "pnpm build && pnpm changeset publish",
 		"fullbuild": "pnpm build && pnpm docs",
 		"test": "tsx tests/index.ts",

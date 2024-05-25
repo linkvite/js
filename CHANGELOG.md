@@ -1,5 +1,11 @@
 # @linkvite/js
 
+## 1.0.0
+
+### Major Changes
+
+- dde7ce6: updated the types to match the new schema, deprecated settings endpoints
+
 ## 0.3.0
 
 ### Minor Changes
