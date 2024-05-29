@@ -392,7 +392,7 @@ export type BookmarkEndpoints =
 				collection: string | null;
 			}
 	  >
-	| Endpoint<'POST', 'v1/bookmarks/file', Bookmark, FormData>
+	| Endpoint<'POST', 'v1/bookmarks/file', string, FormData>
 	| Endpoint<'POST', 'v1/bookmarks/tabs', Bookmark, BookmarkTabsEntry>
 	| Endpoint<
 			'POST',
