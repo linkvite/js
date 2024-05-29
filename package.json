@@ -1,6 +1,6 @@
 {
 	"name": "@linkvite/js",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"type": "module",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",
@@ -35,14 +35,14 @@
 	],
 	"scripts": {
 		"build": "rm -rf dist && tsup && node ./build/copy.js",
-		"pre-release": "pnpm changeset version",
-		"release": "pnpm build && pnpm changeset publish",
+		"pre-release": "pnpm changeset",
+		"release": "pnpm changeset version",
+		"publish": "pnpm build && pnpm changeset publish",
+		"publish:dev": "pnpm build && npm link",
 		"fullbuild": "pnpm build && pnpm docs",
 		"test": "tsx tests/index.ts",
 		"lint": "exec prettier . --write",
 		"package": "pnpm build && pnpm pack",
-		"publish:pkg": "pnpm build && pnpm publish --access public",
-		"publish:dev": "pnpm build && npm link",
 		"prepare": "husky"
 	},
 	"devDependencies": {

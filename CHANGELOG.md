@@ -1,5 +1,11 @@
 # @linkvite/js
 
+## 1.1.0
+
+### Minor Changes
+
+- updated the file endpoint's response type
+
 ## 1.0.0
 
 ### Major Changes
