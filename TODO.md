@@ -1,3 +1,5 @@
+- [] verify ids and key prefixes
+
 - [] implement /api/api-keys
 - [] implement /api/parser
 
