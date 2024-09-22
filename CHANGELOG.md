@@ -1,5 +1,17 @@
 # @linkvite/js
 
+## 2.0.0
+
+### Major Changes
+
+- updated req/res payloads
+
+## 2.0.0
+
+### Major Changes
+
+- updated req/res payloads
+
 ## 1.1.0
 
 ### Minor Changes

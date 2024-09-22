@@ -134,12 +134,14 @@ export type Collection = {
 	bookmarks_count: number;
 };
 
+// TODO: allow file uploads
 export type UpdateCollectionEntry = {
 	name?: string;
 	description?: string;
-	isPrivate?: boolean;
-	allowPublicJoin?: boolean;
+	is_private?: boolean;
+	allow_public_join?: boolean;
 	icon?: string;
+	cover?: string;
 };
 
 export type CreateCollectionEntry = {
@@ -172,9 +174,9 @@ export type MoveOrRemoveCollectionEntry =
 	  };
 
 export type CollectionOnlinePresence = {
-	totalMembers: number;
-	onlineClients: number;
-	onlineMembers: number;
+	total_members: number;
+	online_clients: number;
+	online_members: number;
 };
 
 export type CollectionEndpoints =
@@ -206,6 +208,5 @@ export type CollectionEndpoints =
 			MoveOrRemoveCollectionEntry
 	  >
 	| Endpoint<'PATCH', 'v1/collections/:id', Collection, UpdateCollectionEntry>
-	| Endpoint<'PATCH', 'v1/collections/:id/cover', Collection, FormData>
 	| Endpoint<'PATCH', 'v1/collections/:id/edit-role', Empty, EditUserRoleEntry>
 	| Endpoint<'DELETE', 'v1/collections/:id', Empty>;

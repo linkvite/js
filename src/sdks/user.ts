@@ -1,5 +1,5 @@
 import {sdk} from './create';
-import type {ImageUploadType, UpdateUserEntry} from '../types';
+import type {UpdateSettingsEntry, UpdateUserEntry} from '../types';
 
 /**
  * Users SDK client
@@ -30,42 +30,12 @@ export const user = sdk(client => ({
 	},
 
 	/**
-	 * Update the current user's avatar
+	 * Update the current user's settings
 	 *
-	 * @param {Object} data - The form data to update the user's avatar with
+	 * @param {UpdateSettingsEntry} data - The settings to update the user with
 	 */
-	async updateAvatar({
-		file,
-		avatar,
-		type,
-	}:
-		| {
-				file?: File;
-				avatar?: never;
-				type: Extract<ImageUploadType, 'custom'>;
-		  }
-		| {
-				file?: never;
-				avatar: string;
-				type: Extract<ImageUploadType, 'default'>;
-		  }
-		| {
-				file?: never;
-				avatar?: never;
-				type: Extract<ImageUploadType, 'remove'>;
-		  }) {
-		const formData = new FormData();
-		formData.append('type', type);
-
-		if (type === 'custom' && file) {
-			formData.append('file', file);
-		}
-
-		if (type === 'default' && avatar) {
-			formData.append('avatar', avatar);
-		}
-
-		return await client.patch('v1/user/avatar', formData, {});
+	async updateSettings(data: UpdateSettingsEntry) {
+		return await client.patch('v1/user/settings', data, {});
 	},
 
 	/**

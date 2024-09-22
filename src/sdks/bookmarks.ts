@@ -2,7 +2,7 @@ import type {
 	BookmarkFileEntry,
 	BookmarkPagination,
 	BookmarkTabsEntry,
-	ImageUploadType,
+	CreateBookmarkEntry,
 	ManualBookmarkEntry,
 	ManualBookmarkEntryPayload,
 	ParsedLinkData,
@@ -80,11 +80,10 @@ export const bookmarks = sdk(client => ({
 	/**
 	 * Create a new bookmark by URL
 	 *
-	 * @param {String} url - The URL of the bookmark
-	 * @param {String} collection - The optional ID of the collection
+	 * @param {CreateBookmarkRequest} data - The data to create the bookmark with
 	 */
-	async create(url: string, collection: string | null = null) {
-		return await client.post('v1/bookmarks', {url, collection}, {});
+	async create(url: string, data: CreateBookmarkEntry = {}) {
+		return await client.post('v1/bookmarks', {url, ...data}, {});
 	},
 
 	/**
@@ -108,6 +107,14 @@ export const bookmarks = sdk(client => ({
 		const formData = new FormData();
 		formData.append('file', data.file);
 
+		if (data.title) {
+			formData.append('title', data.title);
+		}
+
+		if (data.description) {
+			formData.append('description', data.description);
+		}
+
 		if (data.collection) {
 			formData.append('collection', data.collection);
 		}
@@ -121,7 +128,7 @@ export const bookmarks = sdk(client => ({
 		}
 
 		if (data.allowComments) {
-			formData.append('allowComments', data.allowComments.toString());
+			formData.append('allow_comments', data.allowComments.toString());
 		}
 
 		return await client.post('v1/bookmarks/file', formData, {});
@@ -143,10 +150,6 @@ export const bookmarks = sdk(client => ({
 		data.tags
 			? (payload = {...data, tags: data.tags.join(',')})
 			: (payload = data as unknown as ManualBookmarkEntryPayload);
-
-		if (data.cover) {
-			payload = {...payload, coverType: 'default'};
-		}
 
 		return await client.post('v1/bookmarks/manual', payload, {});
 	},
@@ -196,44 +199,6 @@ export const bookmarks = sdk(client => ({
 	 */
 	async update(id: string, data: UpdateBookmarkEntry) {
 		return await client.patch('v1/bookmarks/:id', data, {id});
-	},
-
-	/**
-	 * Update a bookmark's cover image
-	 *
-	 * @param {String} id - The ID of the bookmark
-	 * @param {Object} data - The data to update the cover with
-	 */
-	async updateCover(
-		id: string,
-		{
-			file,
-			cover,
-			type,
-		}:
-			| {
-					file?: never;
-					cover: string;
-					type: Extract<ImageUploadType, 'default'>;
-			  }
-			| {
-					file: File;
-					cover?: never;
-					type: Extract<ImageUploadType, 'custom'>;
-			  },
-	) {
-		const formData = new FormData();
-		formData.append('type', type);
-
-		if (type === 'custom' && file) {
-			formData.append('file', file);
-		}
-
-		if (type === 'default' && cover) {
-			formData.append('cover', cover);
-		}
-
-		return await client.patch('v1/bookmarks/:id/cover', formData, {id});
 	},
 
 	/**

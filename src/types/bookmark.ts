@@ -280,6 +280,15 @@ export type BookmarkReader = {
 	text_content: string;
 };
 
+export type CreateBookmarkEntry = {
+	collection?: string;
+	title?: string;
+	description?: string;
+	starred?: boolean;
+	tags?: string;
+	cover?: string;
+};
+
 export type ParsedLinkData = {
 	title: string;
 	description: string;
@@ -305,17 +314,18 @@ export type ManualBookmarkEntry = {
 	starred?: boolean;
 	collection?: string;
 	description?: string;
-	allowComments?: boolean;
+	allow_comments?: boolean;
 };
 
 export type ManualBookmarkEntryPayload = Omit<ManualBookmarkEntry, 'tags'> & {
 	tags?: string;
-	coverType?: 'default';
 };
 
 export type BookmarkFileEntry = BookmarkEntry & {
 	file: File;
+	title?: string;
 	starred?: boolean;
+	description?: string;
 };
 
 export type BookmarkTabsEntry = {
@@ -328,12 +338,13 @@ export type BookmarkTabsEntry = {
 	}[];
 };
 
-export type UpdateBookmarksEntry = BookmarkEntry & {
+export type UpdateBookmarksEntry = Omit<BookmarkEntry, 'allowComments'> & {
 	bookmarks: string[];
 	type?: BookmarkType;
 	status?: BookmarkStatus;
 };
 
+// TODO: allow file uploads
 export type UpdateBookmarkEntry = BookmarkEntry & {
 	name?: string;
 	url?: string;
@@ -341,6 +352,8 @@ export type UpdateBookmarkEntry = BookmarkEntry & {
 	description?: string;
 	favicon?: string;
 	type?: BookmarkType;
+	starred?: boolean;
+	cover?: string;
 };
 
 export type BookmarkEndpoints =
@@ -369,7 +382,7 @@ export type BookmarkEndpoints =
 			{
 				bookmarks: Bookmark[];
 				pagination: Pagination;
-				collection: string;
+				collection_id: string;
 			}
 	  >
 	| Endpoint<'GET', 'v1/bookmarks/:id/archive', string>
@@ -378,10 +391,7 @@ export type BookmarkEndpoints =
 			'POST',
 			'v1/bookmarks',
 			Bookmark,
-			{
-				url: string;
-				collection: string | null;
-			}
+			CreateBookmarkEntry & {url: string}
 	  >
 	| Endpoint<
 			'POST',
@@ -413,5 +423,4 @@ export type BookmarkEndpoints =
 	  >
 	| Endpoint<'PATCH', 'v1/bookmarks/batch-edit', Empty, UpdateBookmarksEntry>
 	| Endpoint<'PATCH', 'v1/bookmarks/:id', Bookmark, UpdateBookmarkEntry>
-	| Endpoint<'PATCH', 'v1/bookmarks/:id/cover', Bookmark, FormData>
 	| Endpoint<'DELETE', 'v1/bookmarks/:id', Empty>;

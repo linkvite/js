@@ -127,17 +127,25 @@ export type UserStorage = {
 	total: number;
 };
 
+// TODO: allow file uploads
 export type UpdateUserEntry = {
 	name?: string;
 	email?: string;
 	username?: string;
-	folderName?: string;
-	privateAccount?: boolean;
+	folder_name?: string;
+	private_account?: boolean;
+	avatar?: string;
+};
+
+export type UpdateSettingsEntry = {
+	push_enabled?: boolean;
+	email_enabled?: boolean;
+	in_app_enabled?: boolean;
 };
 
 export type UserEndpoints =
 	| Endpoint<'GET', 'v1/user', User>
 	| Endpoint<'GET', 'v1/user/storage', UserStorage>
 	| Endpoint<'PATCH', 'v1/user', User, UpdateUserEntry>
-	| Endpoint<'PATCH', 'v1/user/avatar', User, FormData>
+	| Endpoint<'PATCH', 'v1/user/settings', User, UpdateSettingsEntry>
 	| Endpoint<'DELETE', 'v1/user/trash', Empty>;
