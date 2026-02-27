@@ -14,7 +14,7 @@ export type BookmarkType =
 	| 'application'
 	| 'website';
 
-enum BookmarkMimeType {
+export enum BookmarkMimeType {
 	'text/html' = 0,
 	'text/plain' = 1,
 	'application/pdf' = 2,
@@ -240,6 +240,20 @@ export type Bookmark = {
 	collection_name: string | null;
 
 	/**
+	 * The ID of the RSS feed this bookmark was created from
+	 *
+	 * If the bookmark was not created from an RSS feed, this will be null
+	 */
+	rss_feed_id: string | null;
+
+	/**
+	 * A local identifier for the bookmark
+	 *
+	 * Used for client-side deduplication
+	 */
+	local_id: string | null;
+
+	/**
 	 * If the bookmark was recently moved to a different collection
 	 *
 	 * This will be the ID of the old collection
@@ -280,6 +294,15 @@ export type BookmarkReader = {
 	text_content: string;
 };
 
+export type CreateBookmarkEntry = {
+	collection?: string;
+	title?: string;
+	description?: string;
+	starred?: boolean;
+	tags?: string;
+	cover?: string;
+};
+
 export type ParsedLinkData = {
 	title: string;
 	description: string;
@@ -305,17 +328,18 @@ export type ManualBookmarkEntry = {
 	starred?: boolean;
 	collection?: string;
 	description?: string;
-	allowComments?: boolean;
+	allow_comments?: boolean;
 };
 
 export type ManualBookmarkEntryPayload = Omit<ManualBookmarkEntry, 'tags'> & {
 	tags?: string;
-	coverType?: 'default';
 };
 
 export type BookmarkFileEntry = BookmarkEntry & {
 	file: File;
+	title?: string;
 	starred?: boolean;
+	description?: string;
 };
 
 export type BookmarkTabsEntry = {
@@ -328,12 +352,13 @@ export type BookmarkTabsEntry = {
 	}[];
 };
 
-export type UpdateBookmarksEntry = BookmarkEntry & {
+export type UpdateBookmarksEntry = Omit<BookmarkEntry, 'allowComments'> & {
 	bookmarks: string[];
 	type?: BookmarkType;
 	status?: BookmarkStatus;
 };
 
+// TODO: allow file uploads
 export type UpdateBookmarkEntry = BookmarkEntry & {
 	name?: string;
 	url?: string;
@@ -341,6 +366,8 @@ export type UpdateBookmarkEntry = BookmarkEntry & {
 	description?: string;
 	favicon?: string;
 	type?: BookmarkType;
+	starred?: boolean;
+	cover?: string;
 };
 
 export type BookmarkEndpoints =
@@ -349,6 +376,22 @@ export type BookmarkEndpoints =
 	| Endpoint<
 			'GET',
 			'v1/bookmarks',
+			{
+				bookmarks: Bookmark[];
+				pagination: Pagination;
+			}
+	  >
+	| Endpoint<
+			'GET',
+			'v1/bookmarks/all',
+			{
+				bookmarks: Bookmark[];
+				pagination: Pagination;
+			}
+	  >
+	| Endpoint<
+			'GET',
+			'v1/bookmarks/related/tag',
 			{
 				bookmarks: Bookmark[];
 				pagination: Pagination;
@@ -369,7 +412,7 @@ export type BookmarkEndpoints =
 			{
 				bookmarks: Bookmark[];
 				pagination: Pagination;
-				collection: string;
+				collection_id: string;
 			}
 	  >
 	| Endpoint<'GET', 'v1/bookmarks/:id/archive', string>
@@ -378,10 +421,7 @@ export type BookmarkEndpoints =
 			'POST',
 			'v1/bookmarks',
 			Bookmark,
-			{
-				url: string;
-				collection: string | null;
-			}
+			CreateBookmarkEntry & {url: string}
 	  >
 	| Endpoint<
 			'POST',
@@ -413,5 +453,4 @@ export type BookmarkEndpoints =
 	  >
 	| Endpoint<'PATCH', 'v1/bookmarks/batch-edit', Empty, UpdateBookmarksEntry>
 	| Endpoint<'PATCH', 'v1/bookmarks/:id', Bookmark, UpdateBookmarkEntry>
-	| Endpoint<'PATCH', 'v1/bookmarks/:id/cover', Bookmark, FormData>
 	| Endpoint<'DELETE', 'v1/bookmarks/:id', Empty>;

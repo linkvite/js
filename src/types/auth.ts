@@ -1,15 +1,22 @@
 import type {User} from './user';
 import type {Endpoint} from '../rest';
 
-type AuthRefreshResponse = {
+export type LoginResult = {
 	user: User;
-	accessToken: string;
-	refreshToken: string;
+	access_token: string;
+	refresh_token: string;
 };
 
-export type AuthEndpoints = Endpoint<
-	'POST',
-	'v1/auth/token/refresh',
-	AuthRefreshResponse,
-	{refreshToken: string}
->;
+export type LoginEntry = {
+	identifier: string;
+	password: string;
+};
+
+export type AuthEndpoints =
+	| Endpoint<'POST', 'v1/auth/login', LoginResult, LoginEntry>
+	| Endpoint<
+			'POST',
+			'v1/auth/token/refresh',
+			LoginResult,
+			{refresh_token: string}
+	  >;

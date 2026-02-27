@@ -5,12 +5,6 @@
 export type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 /**
- * Image upload type
- * @public
- */
-export type ImageUploadType = 'custom' | 'default' | 'remove';
-
-/**
  * Empty req / response body
  * @public
  */

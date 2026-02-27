@@ -1,4 +1,7 @@
+import type {Endpoint} from '../rest';
+import type {Empty} from './generic';
 import type {RoleLevel} from '.';
+import type {PublicProfile} from './user';
 
 export type CommentStatus = 'active' | 'hidden';
 
@@ -94,3 +97,16 @@ export type Comment = {
 	 */
 	owner_avatar: string;
 };
+
+export type CreateCommentEntry = {
+	bookmark_id: string;
+	content: string;
+};
+
+export type CommentEndpoints =
+	| Endpoint<'GET', 'v1/comments/:id', Comment[]>
+	| Endpoint<'POST', 'v1/comments', Comment, CreateCommentEntry>
+	| Endpoint<'POST', 'v1/comments/:id/like', Empty>
+	| Endpoint<'POST', 'v1/comments/:id/report', Empty>
+	| Endpoint<'GET', 'v1/comments/:id/likes', PublicProfile[]>
+	| Endpoint<'DELETE', 'v1/comments/:id', Empty>;

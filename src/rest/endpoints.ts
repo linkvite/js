@@ -3,7 +3,14 @@ import type {
 	AuthEndpoints,
 	BookmarkEndpoints,
 	CollectionEndpoints,
+	CommentEndpoints,
+	HighlightEndpoints,
+	InviteEndpoints,
 	Method,
+	ParserEndpoints,
+	ReminderEndpoints,
+	RSSFeedEndpoints,
+	SearchEndpoints,
 	UserEndpoints,
 } from '../types';
 
@@ -64,4 +71,11 @@ export type Endpoints =
 	| BookmarkEndpoints
 	| CollectionEndpoints
 	| AuthEndpoints
-	| APIKeyEndpoints;
+	| APIKeyEndpoints
+	| CommentEndpoints
+	| HighlightEndpoints
+	| InviteEndpoints
+	| ReminderEndpoints
+	| RSSFeedEndpoints
+	| SearchEndpoints
+	| ParserEndpoints;

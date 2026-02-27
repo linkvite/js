@@ -2,7 +2,6 @@ import {sdk} from './create';
 import type {
 	CreateCollectionEntry,
 	EditUserRoleEntry,
-	ImageUploadType,
 	InviteToCollectionEntry,
 	MoveOrRemoveCollectionEntry,
 	UpdateCollectionEntry,
@@ -70,6 +69,15 @@ export const collections = sdk(client => ({
 	},
 
 	/**
+	 * Toggle the starred status of a collection
+	 *
+	 * @param {String} id - The ID of the collection
+	 */
+	async toggleStar(id: string) {
+		return await client.post('v1/collections/:id/star', undefined, {id});
+	},
+
+	/**
 	 * Leave a collection
 	 *
 	 * @param {String} id - The ID of the collection
@@ -96,44 +104,6 @@ export const collections = sdk(client => ({
 	 */
 	async update(id: string, data: UpdateCollectionEntry) {
 		return await client.patch('v1/collections/:id', data, {id});
-	},
-
-	/**
-	 * Update a collection's cover image
-	 *
-	 * @param {String} id - The ID of the collection
-	 * @param {Object} data - The data to update the cover with
-	 */
-	async updateCover(
-		id: string,
-		{
-			file,
-			cover,
-			type,
-		}:
-			| {
-					file?: never;
-					cover: string;
-					type: Extract<ImageUploadType, 'default'>;
-			  }
-			| {
-					file: File;
-					cover?: never;
-					type: Extract<ImageUploadType, 'custom'>;
-			  },
-	) {
-		const formData = new FormData();
-		formData.append('type', type);
-
-		if (type === 'custom' && file) {
-			formData.append('file', file);
-		}
-
-		if (type === 'default' && cover) {
-			formData.append('cover', cover);
-		}
-
-		return await client.patch('v1/collections/:id/cover', formData, {id});
 	},
 
 	/**

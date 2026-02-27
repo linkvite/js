@@ -40,11 +40,28 @@ export type APIKey = {
 	update_at: Date;
 
 	/**
+	 * The key prefix (first few characters of the key)
+	 */
+	prefix: string;
+
+	/**
+	 * The scopes/permissions granted to this API key
+	 */
+	scopes: string[];
+
+	/**
 	 * The last time the API key was used
 	 *
 	 * Updated whenever a call is made using the API key
 	 */
 	last_used_at: Date | null;
+
+	/**
+	 * The date the API key expires
+	 *
+	 * If null, the key never expires
+	 */
+	expires_at: Date | null;
 
 	/**
 	 * The date the API key was revoked
@@ -63,7 +80,10 @@ export type APIKey = {
 	secret?: string;
 };
 
-export type CreateOrUpdateAPIKeyEntry = {name: string};
+export type CreateOrUpdateAPIKeyEntry = {
+	name: string;
+	scopes?: string[];
+};
 
 export type APIKeyEndpoints =
 	| Endpoint<'GET', 'v1/api-keys', APIKey[]>
