@@ -42,6 +42,13 @@ export const bookmarks = sdk(client => ({
 	},
 
 	/**
+	 * Get all bookmarks without pagination
+	 */
+	async listAll() {
+		return await client.get('v1/bookmarks/all', {});
+	},
+
+	/**
 	 * Check if a bookmark exists
 	 *
 	 * @param {String} url - The URL of the bookmark
@@ -199,6 +206,16 @@ export const bookmarks = sdk(client => ({
 	 */
 	async update(id: string, data: UpdateBookmarkEntry) {
 		return await client.patch('v1/bookmarks/:id', data, {id});
+	},
+
+	/**
+	 * Get bookmarks related to a specific tag
+	 *
+	 * @param {String} tag - The tag to filter by
+	 * @param {BookmarkPagination} p - Pagination options
+	 */
+	async listByTag(tag: string, p: BookmarkPagination = {}) {
+		return await client.get('v1/bookmarks/related/tag', {tag, ...p});
 	},
 
 	/**

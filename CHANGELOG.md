@@ -1,5 +1,11 @@
 # @linkvite/js
 
+## 3.0.0
+
+### Major Changes
+
+- more clients
+
 ## 2.0.0
 
 ### Major Changes

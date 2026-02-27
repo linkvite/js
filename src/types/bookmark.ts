@@ -14,7 +14,7 @@ export type BookmarkType =
 	| 'application'
 	| 'website';
 
-enum BookmarkMimeType {
+export enum BookmarkMimeType {
 	'text/html' = 0,
 	'text/plain' = 1,
 	'application/pdf' = 2,
@@ -240,6 +240,20 @@ export type Bookmark = {
 	collection_name: string | null;
 
 	/**
+	 * The ID of the RSS feed this bookmark was created from
+	 *
+	 * If the bookmark was not created from an RSS feed, this will be null
+	 */
+	rss_feed_id: string | null;
+
+	/**
+	 * A local identifier for the bookmark
+	 *
+	 * Used for client-side deduplication
+	 */
+	local_id: string | null;
+
+	/**
 	 * If the bookmark was recently moved to a different collection
 	 *
 	 * This will be the ID of the old collection
@@ -362,6 +376,22 @@ export type BookmarkEndpoints =
 	| Endpoint<
 			'GET',
 			'v1/bookmarks',
+			{
+				bookmarks: Bookmark[];
+				pagination: Pagination;
+			}
+	  >
+	| Endpoint<
+			'GET',
+			'v1/bookmarks/all',
+			{
+				bookmarks: Bookmark[];
+				pagination: Pagination;
+			}
+	  >
+	| Endpoint<
+			'GET',
+			'v1/bookmarks/related/tag',
 			{
 				bookmarks: Bookmark[];
 				pagination: Pagination;

@@ -69,6 +69,15 @@ export const collections = sdk(client => ({
 	},
 
 	/**
+	 * Toggle the starred status of a collection
+	 *
+	 * @param {String} id - The ID of the collection
+	 */
+	async toggleStar(id: string) {
+		return await client.post('v1/collections/:id/star', undefined, {id});
+	},
+
+	/**
 	 * Leave a collection
 	 *
 	 * @param {String} id - The ID of the collection

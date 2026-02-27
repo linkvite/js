@@ -21,6 +21,15 @@ export const user = sdk(client => ({
 	},
 
 	/**
+	 * Get a detailed breakdown of storage usage with paginated bookmark info
+	 */
+	async getDetailedStorageUsage(
+		p: {q?: string; page?: number; limit?: number} = {},
+	) {
+		return await client.get('v1/user/storage/detailed', p);
+	},
+
+	/**
 	 * Update the current user's profile
 	 *
 	 * @param {UpdateUserEntry} data - The data to update the user with

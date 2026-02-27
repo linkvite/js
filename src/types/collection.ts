@@ -201,6 +201,7 @@ export type CollectionEndpoints =
 			InviteToCollectionEntry
 	  >
 	| Endpoint<'POST', 'v1/collections/:id/leave', Empty>
+	| Endpoint<'POST', 'v1/collections/:id/star', Empty>
 	| Endpoint<
 			'POST',
 			'v1/collections/:id/move',

@@ -1,6 +1,6 @@
 {
 	"name": "@linkvite/js",
-	"version": "2.0.0",
+	"version": "3.0.0",
 	"type": "module",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",
@@ -55,7 +55,7 @@
 		"typescript": "^5.0.2"
 	},
 	"dependencies": {
-		"cross-fetch": "^3.1.5"
+		"cross-fetch": "4.1.0"
 	},
 	"description": "🤠 Javascript SDK for Linkvite. Requires Node.js 12+. Inspired by [Hop](https://github.com/hopinc/js)",
 	"bugs": {
