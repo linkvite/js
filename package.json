@@ -23,7 +23,7 @@
 	"author": "Linkvite <support@linkvite.io>",
 	"license": "MIT",
 	"sideEffects": false,
-	"packageManager": "pnpm@7.28.0",
+	"packageManager": "pnpm@10.30.3",
 	"publishConfig": {
 		"access": "public"
 	},
