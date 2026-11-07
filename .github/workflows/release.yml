@@ -9,6 +9,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  id-token: write # npm provenance
 
 jobs:
   release:
@@ -36,9 +37,10 @@ jobs:
         uses: changesets/action@v1
         with:
           version: pnpm release
-          publish: pnpm publish
+          publish: pnpm release:publish
           commit: 'Version Packages'
           title: 'Version Packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: 'true'

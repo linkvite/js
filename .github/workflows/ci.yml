@@ -37,18 +37,14 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Format check
-        run: pnpm exec prettier . --check
+        run: pnpm format:check
+
+      # generated code matches spec/openapi.json, typecheck, unit + type tests
+      - name: Check
+        run: pnpm check
 
       - name: Build
         run: pnpm build
-
-      - name: Test
-        run: |
-          if [ -f tests/index.ts ]; then
-            pnpm exec tsx tests/index.ts
-          else
-            echo "No tests/index.ts found, skipping tests."
-          fi
 
   smoke-os:
     name: Node 20 (${{ matrix.os }})

@@ -1,35 +1,17 @@
-import {defineConfig, type Options} from 'tsup';
+import {readFileSync} from 'node:fs';
+import {defineConfig} from 'tsup';
 
-const commonBuild: Options = {
-	splitting: true,
-	clean: true,
-	sourcemap: true,
-	dts: true,
-	format: ['cjs', 'esm'],
-	minifySyntax: true,
-	minifyWhitespace: true,
-	target: 'esnext',
-	banner: {
-		js: `/* Copyright ${new Date().getFullYear()} Linkvite Labs */`,
-	},
+const {version} = JSON.parse(readFileSync('./package.json', 'utf8')) as {
+	version: string;
 };
 
-const define = ({node = false} = {}) => ({
-	TSUP_IS_NODE: JSON.stringify(node),
+export default defineConfig({
+	entry: ['src/index.ts'],
+	format: ['esm', 'cjs'],
+	dts: true,
+	sourcemap: true,
+	clean: true,
+	target: 'es2022',
+	define: {__SDK_VERSION__: JSON.stringify(version)},
+	banner: {js: `/* Copyright ${new Date().getFullYear()} Linkvite */`},
 });
-
-export default defineConfig([
-	{
-		...commonBuild,
-		entry: ['./src/index.ts', './src/utils/*/index.ts'],
-		define: define(),
-	},
-	{
-		...commonBuild,
-		entry: ['src/index.ts'],
-		outDir: './dist/node',
-		define: define({
-			node: true,
-		}),
-	},
-]);
