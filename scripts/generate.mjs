@@ -10,8 +10,8 @@
 // positional arguments (in path order), then the request body, then the query
 // object, then per-request options.
 import {readFile, writeFile} from 'node:fs/promises';
-import {fileURLToPath} from 'node:url';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import openapiTS, {astToString} from 'openapi-typescript';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -49,7 +49,7 @@ const ast = await openapiTS(pub, {
 	immutable: false,
 	defaultNonNullable: false,
 });
-const schemaTs = header + '/* eslint-disable */\n' + astToString(ast);
+const schemaTs = `${header}/* eslint-disable */\n${astToString(ast)}`;
 
 // ---------------------------------------------------------------- resources
 const namespaces = new Map();
@@ -72,7 +72,7 @@ const ident = s => s.replace(/[^A-Za-z0-9_$]/g, '_');
 const jsdoc = (op, extra = []) => {
 	const lines = [];
 	if (op.summary)
-		lines.push(op.summary.endsWith('.') ? op.summary : op.summary + '.');
+		lines.push(op.summary.endsWith('.') ? op.summary : `${op.summary}.`);
 	if (op.description) lines.push('', ...op.description.split('\n'));
 	const meta = [];
 	if (op['x-linkvite-scopes']?.length)
@@ -130,10 +130,9 @@ for (const ns of [...namespaces.keys()].sort()) {
 				'@param body - Sent as multipart/form-data; pass a Blob or File for file fields.',
 			);
 		if (extra.length) extra.unshift('');
-		out +=
-			jsdoc(op, extra)
-				.map(l => '\t\t\t' + l)
-				.join('\n') + '\n';
+		out += `${jsdoc(op, extra)
+			.map(l => `\t\t\t${l}`)
+			.join('\n')}\n`;
 		out += `\t\t\t${name}: (${sig.join(', ')}): Promise<Data<${O}>> =>\n`;
 		out += `\t\t\t\tt.request<Data<${O}>>('${method}', '${p}', {${call.join(', ')}}, options),\n`;
 	}

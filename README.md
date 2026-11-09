@@ -2,7 +2,7 @@
 
 The official JavaScript/TypeScript SDK for [Linkvite](https://linkvite.io). It's generated from the Linkvite OpenAPI spec, so every endpoint, request and response is typed and matches the API exactly.
 
-Works in Node 18+, Deno, Bun, browsers and browser extensions (anything with `fetch`).
+Works in Node 20+, Deno, Bun, browsers and browser extensions (anything with `fetch`).
 
 ```bash
 pnpm add @linkvite/js   # or npm i / yarn add
@@ -152,7 +152,7 @@ type Bookmark = Schemas['BookmarkResponse'];
 - Removed (no longer in the API): `bookmarks.reParse`, `bookmarks.listByTag`, `collections.toggleStar`, `comments.report`.
 - `collections.getAll` calls `GET /v1/collections` (paginated).
 - `refreshToken()` → `refreshSession()`; prefer OAuth for apps.
-- No `cross-fetch` dependency: Node 18+ has `fetch`, or pass your own.
+- No `cross-fetch` dependency: Node 20+ has `fetch`, or pass your own.
 
 ## Development
 

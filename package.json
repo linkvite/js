@@ -25,7 +25,7 @@
 		"README.md"
 	],
 	"engines": {
-		"node": ">=18"
+		"node": ">=20"
 	},
 	"repository": {
 		"type": "git",
@@ -49,26 +49,26 @@
 	},
 	"scripts": {
 		"generate": "node scripts/generate.mjs",
-		"build": "tsup",
+		"build": "tsdown",
 		"typecheck": "tsc --noEmit",
 		"test": "vitest run --typecheck",
-		"check": "pnpm generate --check && pnpm typecheck && pnpm test",
+		"check": "pnpm generate --check && pnpm lint && pnpm typecheck && pnpm test",
 		"pre-release": "changeset",
 		"release": "changeset version",
-		"lint": "prettier . --write",
-		"format:check": "prettier . --check",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write .",
 		"prepare": "husky",
 		"changeset": "changeset",
 		"release:publish": "pnpm check && pnpm build && changeset publish"
 	},
 	"devDependencies": {
-		"@changesets/cli": "^2.29.0",
-		"@types/node": "^22.10.0",
+		"@biomejs/biome": "2.6.6",
+		"@changesets/cli": "^3.0.3",
+		"@types/node": "^26.6.6",
 		"husky": "^9.1.0",
 		"openapi-typescript": "^7.8.0",
-		"prettier": "^3.6.0",
-		"tsup": "^8.5.0",
-		"typescript": "^5.9.0",
-		"vitest": "^3.2.0"
+		"tsdown": "^0.23.7",
+		"typescript": "^7.0.2",
+		"vitest": "^5.1.0"
 	}
 }

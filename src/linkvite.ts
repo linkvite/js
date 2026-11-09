@@ -1,11 +1,11 @@
+import {LinkviteError} from './errors';
 import {createResources, type Resources} from './generated/resources';
 import type {components} from './generated/schema';
-import {LinkviteError} from './errors';
 import {
-	DEFAULT_BASE_URL,
-	Transport,
 	type ClientOptions,
+	DEFAULT_BASE_URL,
 	type RequestOptions,
+	Transport,
 } from './transport';
 
 /**
@@ -21,6 +21,9 @@ import {
  */
 export interface Linkvite extends Resources {}
 
+// The resource namespaces (linkvite.bookmarks, …) are generated and assigned in
+// the constructor; the merged interface above gives the class their types.
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: intentional, see above
 export class Linkvite {
 	readonly transport: Transport;
 

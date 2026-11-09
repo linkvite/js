@@ -51,7 +51,7 @@ export function authorizeUrl(
 	p: AuthorizeUrlParams,
 	opts: OAuthOptions = {},
 ): string {
-	const u = new URL(base(opts) + '/v1/oauth/authorize');
+	const u = new URL(`${base(opts)}/v1/oauth/authorize`);
 	u.searchParams.set('response_type', 'code');
 	u.searchParams.set('client_id', p.clientId);
 	u.searchParams.set('redirect_uri', p.redirectUri);

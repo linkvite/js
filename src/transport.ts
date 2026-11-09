@@ -10,7 +10,8 @@ type JsonContent<R> = R extends {content: {'application/json': infer B}}
 	? B
 	: R extends {content: {[k: string]: infer B}}
 		? B
-		: void;
+		: // biome-ignore lint/suspicious/noConfusingVoidType: no body, so methods resolve to Promise<void>
+			void;
 
 type SuccessBody<O> = O extends {responses: infer R}
 	? 200 extends keyof R
@@ -19,7 +20,8 @@ type SuccessBody<O> = O extends {responses: infer R}
 			? JsonContent<R[201]>
 			: 202 extends keyof R
 				? JsonContent<R[202]>
-				: void
+				: // biome-ignore lint/suspicious/noConfusingVoidType: no body, so methods resolve to Promise<void>
+					void
 	: never;
 
 /**
@@ -135,8 +137,9 @@ export class Transport {
 		const qs = new URLSearchParams();
 		for (const [k, v] of Object.entries(parts.query ?? {})) {
 			if (v === undefined || v === null) continue;
-			if (Array.isArray(v)) v.forEach(x => qs.append(k, String(x)));
-			else qs.set(k, String(v));
+			if (Array.isArray(v)) {
+				for (const x of v) qs.append(k, String(x));
+			} else qs.set(k, String(v));
 		}
 		const q = qs.toString();
 		return this.baseUrl + p + (q ? `?${q}` : '');

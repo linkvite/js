@@ -1,4 +1,5 @@
 import {describe, expect, expectTypeOf, it, vi} from 'vitest';
+import spec from '../spec/openapi.json' with {type: 'json'};
 import {
 	Linkvite,
 	LinkviteError,
@@ -6,7 +7,6 @@ import {
 	operationIds,
 	type Schemas,
 } from '../src';
-import spec from '../spec/openapi.json' with {type: 'json'};
 
 type Call = {url: string; init: RequestInit};
 
