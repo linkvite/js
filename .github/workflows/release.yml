@@ -9,23 +9,24 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  id-token: write # npm provenance
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
           registry-url: https://registry.npmjs.org
           cache: pnpm
 
@@ -36,9 +37,10 @@ jobs:
         uses: changesets/action@v1
         with:
           version: pnpm release
-          publish: pnpm publish
-          commit: 'Version Packages'
-          title: 'Version Packages'
+          publish: pnpm release:publish
+          commit: "Version Packages"
+          title: "Version Packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "true"

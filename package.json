@@ -1,71 +1,74 @@
 {
 	"name": "@linkvite/js",
 	"version": "3.0.0",
+	"description": "Official JavaScript/TypeScript SDK for Linkvite, generated from the Linkvite OpenAPI spec.",
 	"type": "module",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"node": {
-				"import": "./dist/node/index.js",
-				"require": "./dist/node/index.cjs"
+			"import": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.js"
 			},
-			"import": "./dist/index.js",
-			"require": "./dist/index.cjs"
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			}
 		}
+	},
+	"sideEffects": false,
+	"files": [
+		"dist",
+		"LICENSE",
+		"README.md"
+	],
+	"engines": {
+		"node": ">=20"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/linkvite/js.git"
 	},
-	"homepage": "https://docs.linkvite.io/sdks/server/js",
+	"homepage": "https://docs.linkvite.io/sdks/javascript",
+	"bugs": {
+		"url": "https://github.com/linkvite/js/issues"
+	},
 	"author": "Linkvite <support@linkvite.io>",
 	"license": "MIT",
-	"sideEffects": false,
+	"keywords": [
+		"linkvite",
+		"bookmarks",
+		"bookmark-manager",
+		"sdk"
+	],
 	"packageManager": "pnpm@10.30.3",
 	"publishConfig": {
 		"access": "public"
 	},
-	"files": [
-		"dist",
-		"LICENSE",
-		"README.md",
-		"package.json"
-	],
 	"scripts": {
-		"build": "rm -rf dist && tsup && node ./build/copy.js",
-		"pre-release": "pnpm changeset",
-		"release": "pnpm changeset version",
-		"publish": "pnpm build && pnpm changeset publish",
-		"publish:dev": "pnpm build && npm link",
-		"fullbuild": "pnpm build && pnpm docs",
-		"test": "tsx tests/index.ts",
-		"lint": "exec prettier . --write",
-		"package": "pnpm build && pnpm pack",
-		"prepare": "husky"
+		"generate": "node scripts/generate.mjs",
+		"build": "tsdown",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run --typecheck",
+		"check": "pnpm generate --check && pnpm lint && pnpm typecheck && pnpm test",
+		"pre-release": "changeset",
+		"release": "changeset version",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write .",
+		"prepare": "husky",
+		"changeset": "changeset",
+		"release:publish": "pnpm check && pnpm build && changeset publish"
 	},
 	"devDependencies": {
-		"@changesets/cli": "^2.27.1",
-		"@types/node": "18.15.5",
-		"dotenv": "16.0.3",
-		"husky": "^9.0.11",
-		"prettier": "2.8.6",
-		"tsup": "8.0.1",
-		"typescript": "^5.0.2"
-	},
-	"dependencies": {
-		"cross-fetch": "4.1.0"
-	},
-	"description": "🤠 Javascript SDK for Linkvite. Requires Node.js 12+. Inspired by [Hop](https://github.com/hopinc/js)",
-	"bugs": {
-		"url": "https://github.com/linkvite/js/issues"
-	},
-	"directories": {
-		"example": "example"
-	},
-	"keywords": [
-		"bookmark-manager",
-		"bookmarks"
-	]
+		"@biomejs/biome": "2.6.6",
+		"@changesets/cli": "^3.0.3",
+		"@types/node": "^26.6.6",
+		"husky": "^9.1.0",
+		"openapi-typescript": "^7.8.0",
+		"tsdown": "^0.23.7",
+		"typescript": "^7.0.2",
+		"vitest": "^5.1.0"
+	}
 }
