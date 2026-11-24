@@ -2872,6 +2872,7 @@ export type components = {
             description: string;
             id: string;
             title: string;
+            url?: string;
         };
         requestLinkCheckBody: {
             bookmarks?: string[];

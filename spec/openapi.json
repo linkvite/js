@@ -4935,6 +4935,9 @@
           },
           "title": {
             "type": "string"
+          },
+          "url": {
+            "type": "string"
           }
         },
         "required": [
@@ -6366,6 +6369,41 @@
         "summary": "Get well known OAuth protected resource MCP",
         "tags": [
           "OAuth"
+        ],
+        "x-linkvite-middlewares": null,
+        "x-linkvite-visibility": "internal"
+      }
+    },
+    "/email/{file}": {
+      "get": {
+        "description": "Emails are cached by mail clients and proxies (Gmail's image proxy) for a long time, so a changed image needs a new name.",
+        "operationId": "emailAsset",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "file",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "image/png"
+          }
+        },
+        "security": [],
+        "summary": "Serves an image embedded in the mailer",
+        "tags": [
+          "Generic"
         ],
         "x-linkvite-middlewares": null,
         "x-linkvite-visibility": "internal"
@@ -15843,7 +15881,7 @@
         "x-linkvite-visibility": "public"
       },
       "post": {
-        "description": "�\ufffd\ufffd {follow: following}\n\nPrivate accounts can't be followed (400).",
+        "description": "��� {follow: following}\n\nPrivate accounts can't be followed (400).",
         "operationId": "followProfile",
         "parameters": [
           {
