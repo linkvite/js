@@ -1,34 +1,44 @@
 name: CI
 
+# Branch protection should require only the "CI" job at the bottom: the
+# matrix job names change whenever the Node versions do.
+#
+# No schedule: GitHub disables scheduled workflows after 60 days without
+# activity, which took this whole workflow (and every PR check) down with it.
+
 on:
   pull_request:
   push:
     branches:
       - main
-      - master
-  schedule:
-    - cron: '0 7 * * 1'
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   quality:
-    name: Node ${{ matrix.node }} (Ubuntu)
+    name: Node ${{ matrix.node }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         node:
-          - 18
           - 20
           - 22
+          - 24
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node }}
           cache: pnpm
@@ -36,23 +46,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Format check
-        run: pnpm exec prettier . --check
+      # generated code matches spec/openapi.json, Biome lint + format,
+      # typecheck, unit + type tests
+      - name: Check
+        run: pnpm check
 
       - name: Build
         run: pnpm build
 
-      - name: Test
-        run: |
-          if [ -f tests/index.ts ]; then
-            pnpm exec tsx tests/index.ts
-          else
-            echo "No tests/index.ts found, skipping tests."
-          fi
-
+  # the build on macOS and Windows too, after merging to main
   smoke-os:
-    name: Node 20 (${{ matrix.os }})
-    if: github.event_name == 'schedule'
+    name: Build on ${{ matrix.os }}
+    if: github.event_name == 'push'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -63,15 +68,15 @@ jobs:
           - windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
 
       - name: Install dependencies
@@ -79,3 +84,12 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+  ci:
+    name: CI
+    if: always()
+    needs: [quality]
+    runs-on: ubuntu-latest
+    steps:
+      - name: All Node versions passed
+        run: '[ "${{ needs.quality.result }}" = success ]'
