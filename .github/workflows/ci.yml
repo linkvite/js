@@ -1,17 +1,27 @@
 name: CI
 
+# Branch protection should require only the "CI" job at the bottom: the
+# matrix job names change whenever the Node versions do.
+#
+# No schedule: GitHub disables scheduled workflows after 60 days without
+# activity, which took this whole workflow (and every PR check) down with it.
+
 on:
   pull_request:
   push:
     branches:
       - main
-      - master
-  schedule:
-    - cron: "0 7 * * 1"
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   quality:
-    name: Node ${{ matrix.node }} (Ubuntu)
+    name: Node ${{ matrix.node }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -44,9 +54,10 @@ jobs:
       - name: Build
         run: pnpm build
 
+  # the build on macOS and Windows too, after merging to main
   smoke-os:
-    name: Node 22 (${{ matrix.os }})
-    if: github.event_name == 'schedule'
+    name: Build on ${{ matrix.os }}
+    if: github.event_name == 'push'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -73,3 +84,12 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+  ci:
+    name: CI
+    if: always()
+    needs: [quality]
+    runs-on: ubuntu-latest
+    steps:
+      - name: All Node versions passed
+        run: '[ "${{ needs.quality.result }}" = success ]'
