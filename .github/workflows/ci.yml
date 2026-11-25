@@ -5,6 +5,8 @@ name: CI
 #
 # No schedule: GitHub disables scheduled workflows after 60 days without
 # activity, which took this whole workflow (and every PR check) down with it.
+#
+# No Node 20: it is end-of-life, and tsdown needs Node 22+ (Promise.withResolvers).
 
 on:
   pull_request:
@@ -27,7 +29,6 @@ jobs:
       fail-fast: false
       matrix:
         node:
-          - 20
           - 22
           - 24
     steps:
