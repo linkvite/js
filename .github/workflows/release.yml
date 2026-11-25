@@ -47,4 +47,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # setup-node (registry-url above) points npm at its own .npmrc, which
+          # reads the token from NODE_AUTH_TOKEN; without it npm sends a
+          # placeholder and the registry answers the publish with E404
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"
