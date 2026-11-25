@@ -1,6 +1,6 @@
 {
 	"name": "@linkvite/js",
-	"version": "3.0.0",
+	"version": "4.0.0",
 	"description": "Official JavaScript/TypeScript SDK for Linkvite, generated from the Linkvite OpenAPI spec.",
 	"type": "module",
 	"main": "./dist/index.cjs",
