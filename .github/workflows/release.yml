@@ -9,7 +9,10 @@ on:
 permissions:
   contents: write
   pull-requests: write
-  id-token: write # npm provenance
+  # npm trusted publishing: npm swaps this job's GitHub OIDC token for a
+  # short-lived publish token (no NPM_TOKEN secret, no 2FA prompt) and adds
+  # provenance automatically
+  id-token: write
 
 jobs:
   release:
@@ -30,9 +33,17 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: 22
-          registry-url: https://registry.npmjs.org
+          # no registry-url: its .npmrc would send a NODE_AUTH_TOKEN placeholder
+          # instead of letting npm use OIDC
+          node-version: 24
           cache: pnpm
+
+      # trusted publishing needs npm 11.5.1+ (pnpm publish hands the upload to npm)
+      - name: Check npm version
+        run: |
+          npm --version
+          node -e 'const [a,b,c]=process.argv[1].split(".").map(Number);process.exit(a>11||(a==11&&(b>5||(b==5&&c>=1)))?0:1)' "$(npm --version)" \
+            || npm install -g npm@11
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -46,9 +57,5 @@ jobs:
           title: "Version Packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          # setup-node (registry-url above) points npm at its own .npmrc, which
-          # reads the token from NODE_AUTH_TOKEN; without it npm sends a
-          # placeholder and the registry answers the publish with E404
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: "true"
+          # no NPM_TOKEN: changesets/action then publishes through OIDC (trusted
+          # publishing, configured on npmjs.com for linkvite/js + release.yml)
